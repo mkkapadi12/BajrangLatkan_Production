@@ -10,9 +10,14 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(
-  "mongodb+srv://niravkanzariya11:nirav11@productworker.4lzp4mg.mongodb.net/?retryWrites=true&w=majority&appName=productworker"
-);
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("MongoDB connected successfully");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
 const connection = mongoose.connection;
 connection.once("open", () => {
