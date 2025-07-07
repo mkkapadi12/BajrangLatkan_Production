@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import { usePathname } from "next/navigation"
 import { Menu, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useNavigate } from "react-router-dom";
 
