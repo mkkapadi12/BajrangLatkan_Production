@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, LogIn, Sparkles, User, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
   Card,
   CardContent,
