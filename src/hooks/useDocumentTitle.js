@@ -1,4 +1,4 @@
-import React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 
 /**
  * Custom hook to update the document title on page/component change.

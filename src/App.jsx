@@ -9,11 +9,11 @@ import WorkersPage from "./pages/WorkerPage";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import WorkerDetailsPage from "./pages/SingleWorker";
-import SingleWorkerPage from "./pages/SingleWorkerPage";
+// import SingleWorkerPage from "./pages/SingleWorkerPage";
 import LoginPage from "./pages/Auth/Login";
 import SignupPage from "./pages/Auth/SignUp";
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Layout>
@@ -34,6 +34,6 @@ function App() {
       </Layout>
     </Router>
   );
-}
+};
 
 export default App;

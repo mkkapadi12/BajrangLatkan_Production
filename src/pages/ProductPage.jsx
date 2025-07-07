@@ -28,13 +28,13 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-20 text-white bg-gradient-to-r from-purple-600 to-purple-800">
+        <div className="container px-4 mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">
               Our <span className="text-yellow-300">Latkan</span> Collection
             </h1>
-            <p className="text-xl text-purple-100 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-xl text-purple-100">
               Discover our extensive range of handcrafted latkans for every occasion and celebration
             </p>
           </div>
@@ -43,53 +43,53 @@ export default function ProductsPage() {
 
       {/* Products Section */}
       <section className="py-20">
-        <div className="container mx-auto px-4">
+        <div className="container px-4 mx-auto">
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-12 justify-center">
-            <Button variant="outline" className="border-purple-200 bg-transparent">
-              <Filter className="mr-2 h-4 w-4" />
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <Button variant="outline" className="bg-transparent border-purple-200">
+              <Filter className="w-4 h-4 mr-2" />
               All Categories
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Traditional
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Festival
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Designer
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Wedding
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Kids
             </Button>
-            <Button variant="outline" className="border-purple-200 bg-transparent">
+            <Button variant="outline" className="bg-transparent border-purple-200">
               Corporate
             </Button>
           </div>
 
           {/* Products Grid */}
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-2 lg:px-20">
+          <div className="grid gap-8 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:px-20">
             {products?.map((product) => (
-              <Card key={product?._id} className="hover:shadow-lg transition-shadow border-purple-100 pt-0">
+              <Card key={product?._id} className="pt-0 transition-shadow border-purple-100 hover:shadow-lg">
                 <CardHeader className="p-0">
-                  <div className="aspect-square bg-gray-100 rounded-t-lg flex items-center justify-center">
-                    <Package className="h-16 w-16 text-gray-400" />
+                  <div className="flex items-center justify-center bg-gray-100 rounded-t-lg aspect-square">
+                    <Package className="w-16 h-16 text-gray-400" />
                   </div>
                 </CardHeader>
                 <CardContent className="px-3">
-                  <div className="flex justify-between items-start mb-2">
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                  <div className="flex items-start justify-between mb-2">
+                    <Badge variant="secondary" className="text-purple-800 bg-purple-100">
                         {product?.category || 'Category'}
                     </Badge>
                     <div className="flex items-center">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm text-gray-600 ml-1">{product?.rating || "4.8"}</span>
+                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                      <span className="ml-1 text-sm text-gray-600">{product?.rating || "4.8"}</span>
                     </div>
                   </div>
-                  <CardTitle className="text-xl mb-2">{product?.name}</CardTitle>
+                  <CardTitle className="mb-2 text-xl">{product?.name}</CardTitle>
                   <CardDescription className="mb-4">{product?.description}</CardDescription>
                   {/* <div className="mb-4">
                     <div className="flex flex-wrap gap-2">
@@ -100,7 +100,7 @@ export default function ProductsPage() {
                       ))}
                     </div>
                   </div> */}
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-between">
                     <span className="text-lg font-bold text-purple-600">₹{product?.price}</span>
                     <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
                       View Details
@@ -115,32 +115,32 @@ export default function ProductsPage() {
 
       {/* Custom Orders Section */}
       <section className="py-20 bg-purple-50">
-        <div className="container mx-auto px-4">
+        <div className="container px-4 mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Need Something Custom?</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="mb-6 text-3xl font-bold text-gray-900 md:text-4xl">Need Something Custom?</h2>
+            <p className="mb-8 text-xl text-gray-600">
               We specialize in creating custom latkans tailored to your specific requirements and designs
             </p>
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="grid gap-8 mb-12 md:grid-cols-3">
               <div className="text-center">
-                <div className="bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 text-white bg-purple-600 rounded-full">
                   1
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Share Your Design</h3>
+                <h3 className="mb-2 text-lg font-semibold">Share Your Design</h3>
                 <p className="text-gray-600">Send us your design ideas or requirements</p>
               </div>
               <div className="text-center">
-                <div className="bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 text-white bg-purple-600 rounded-full">
                   2
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Get Quote</h3>
+                <h3 className="mb-2 text-lg font-semibold">Get Quote</h3>
                 <p className="text-gray-600">Receive detailed pricing and timeline</p>
               </div>
               <div className="text-center">
-                <div className="bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 text-white bg-purple-600 rounded-full">
                   3
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Receive Product</h3>
+                <h3 className="mb-2 text-lg font-semibold">Receive Product</h3>
                 <p className="text-gray-600">Get your custom latkans delivered</p>
               </div>
             </div>
