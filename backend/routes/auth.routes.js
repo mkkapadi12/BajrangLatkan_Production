@@ -9,10 +9,10 @@ router.get("/", authController.home);
 router.post("/signup", authController.register);
 
 //Login route
-// router.post("/login", authController.login);
+router.post("/login", authController.login);
 
 //user profile route
-// router.get("/user", authController.user);
+router.get("/user", authController.user);
 
 //Profile update route
 // router.put("/profile", authController.profile);

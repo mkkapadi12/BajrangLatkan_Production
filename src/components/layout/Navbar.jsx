@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-// import { usePathname } from "next/navigation"
 import { Menu, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function Navbar() {
+  const { isLoggedIn, user } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = useNavigate();
+  const navigate = useNavigate();
 
   const navigation = [
     { name: "Home", to: "/" },
@@ -18,7 +19,7 @@ export default function Navbar() {
   ];
 
   const isActive = (to) => {
-    return pathname === to;
+    return navigate === to;
   };
 
   return (
@@ -48,14 +49,30 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="items-center hidden space-x-4 md:flex">
-            <Link to="/login" className="w-full">
-              <Button
-                variant="outline"
-                className="text-white bg-transparent border-white hover:bg-white hover:text-purple-600"
-              >
-                Login
-              </Button>
-            </Link>
+            {isLoggedIn ? (
+              <>
+                <Link to="/logout" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="text-white bg-transparent border-white hover:bg-white hover:text-purple-600"
+                  >
+                    Logout
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="text-white bg-transparent border-white hover:bg-white hover:text-purple-600"
+                  >
+                    Login
+                  </Button>
+                </Link>
+              </>
+            )}
+
             <Button className="text-black bg-yellow-500 hover:bg-yellow-600">
               Get Started
             </Button>

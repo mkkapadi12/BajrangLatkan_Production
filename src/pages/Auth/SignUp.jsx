@@ -33,6 +33,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/services/api";
+import toast from "react-hot-toast";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -112,6 +113,7 @@ export default function SignupPage() {
           agreeToTerms: false,
         });
         router("/login");
+        toast.success("Registration successfully");
       }
       console.log(res_data.msg);
     } catch (err) {

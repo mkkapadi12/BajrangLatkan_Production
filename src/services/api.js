@@ -96,4 +96,20 @@ export const api = {
       console.error(error.message);
     }
   },
+
+  async login(data) {
+    try {
+      const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      // if (!response.ok) throw new Error("Failed to create user");
+      return response;
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
 };

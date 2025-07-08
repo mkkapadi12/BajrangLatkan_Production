@@ -12,6 +12,8 @@ import WorkerDetailsPage from "./pages/SingleWorker";
 // import SingleWorkerPage from "./pages/SingleWorkerPage";
 import LoginPage from "./pages/Auth/Login";
 import SignupPage from "./pages/Auth/SignUp";
+import { Toaster } from "react-hot-toast";
+import Logout from "./pages/Auth/Logout";
 
 const App = () => {
   return (
@@ -20,6 +22,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/logout" element={<Logout />} />
           {/* <Route path="/forgot-password" element={<div>Forgot Password Page</div>} /> */}
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -32,6 +35,7 @@ const App = () => {
           <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
       </Layout>
+      <Toaster />
     </Router>
   );
 };

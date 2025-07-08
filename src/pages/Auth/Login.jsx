@@ -12,10 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "@/services/api";
+import { useAuthContext } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
-  //   const router = useRouter();
+  const { storeTokenInLS } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -24,6 +27,7 @@ export default function LoginPage() {
     password: "",
     rememberMe: false,
   });
+  const router = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,15 +38,22 @@ export default function LoginPage() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Mock validation
-      if (
-        formData.email === "worker@bajranglatkan.com" &&
-        formData.password === "password123"
-      ) {
-        // Successful login
-        // router.push("/workers");
+      const response = await api.login(formData);
+      if (response.ok) {
+        const res_data = await response.json();
+        // console.log("Json Data :", res_data);
+        if (res_data.msg === "Login successfully!") {
+          // Store token and userId in localStorage
+          storeTokenInLS(res_data.token);
+          // Redirect to worker dashboard
+          router("/workers");
+          toast.success("Login successful!");
+        } else {
+          setError(res_data.msg || "Login failed. Please try again.");
+        }
       } else {
-        setError("Invalid email or password. Please try again.");
+        const errorData = await response.json();
+        setError(errorData.msg || "Login failed. Please try again.");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -78,7 +89,7 @@ export default function LoginPage() {
           <CardHeader className="pb-6 space-y-1">
             <CardTitle className="flex items-center justify-center text-2xl text-center">
               <LogIn className="w-6 h-6 mr-2 text-purple-600" />
-              Worker Login
+              Employee Login
             </CardTitle>
             <CardDescription className="text-center">
               Enter your credentials to access your account

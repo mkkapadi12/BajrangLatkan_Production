@@ -37,43 +37,43 @@ const register = async (req, res) => {
 
 //Login Auth route Controller :
 
-// const login = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-//     //It is valid or not ?
-//     const userExist = await USER.findOne({ email });
+    //It is valid or not ?
+    const userExist = await USER.findOne({ email });
 
-//     if (!userExist) {
-//       return res.status(400).json({ msg: "Invalid Credentials !" });
-//     }
+    if (!userExist) {
+      return res.status(400).json({ msg: "Invalid Credentials !" });
+    }
 
-//     const user = await userExist.comparePassword(password);
+    const user = await userExist.comparePassword(password);
 
-//     if (user) {
-//       return res.status(200).json({
-//         msg: "Login successfully!",
-//         token: await userExist.generateToken(),
-//         userId: userExist._id.toString(),
-//       });
-//     } else {
-//       return res.status(400).json({ msg: "Invalid Credentials !" });
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "Internal server error." });
-//   }
-// };
+    if (user) {
+      return res.status(200).json({
+        msg: "Login successfully!",
+        token: await userExist.generateToken(),
+        userId: userExist._id.toString(),
+      });
+    } else {
+      return res.status(400).json({ msg: "Invalid Credentials !" });
+    }
+  } catch (error) {
+    return res.status(500).json({ msg: "Internal server error." });
+  }
+};
 
 //User Auth route Controller :
 
-// const user = async (req, res) => {
-//   try {
-//     const userData = req.user;
-//     return res.status(200).json({ userData });
-//   } catch (error) {
-//     return res.status(500).json({ message: "Internal server error." });
-//   }
-// };
+const user = async (req, res) => {
+  try {
+    const userData = req.user;
+    return res.status(200).json({ userData });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
 
 //Profile Route :
 
@@ -105,4 +105,4 @@ const register = async (req, res) => {
 //   }
 // };
 
-module.exports = { home, register };
+module.exports = { home, register, login, user };

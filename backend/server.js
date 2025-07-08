@@ -9,7 +9,14 @@ const port = process.env.PORT || 5000;
 // Import routes
 const auth_route = require("./routes/auth.routes");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // MongoDB connection
