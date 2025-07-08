@@ -84,6 +84,8 @@ export default function WorkersPage() {
         salary: Number(formData.salary),
       };
 
+      console.log("Submitting worker data:", workerData);
+
       await api.createWorker(workerData);
       setIsModalOpen(false);
       setFormData({

@@ -1,11 +1,23 @@
 const mongoose = require("mongoose");
 
 const workerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  role: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+  },
   skills: [{ type: String }],
-  experience: { type: Number, required: true },
-  salary: { type: Number, required: true },
+  experience: {
+    type: Number,
+    required: true,
+  },
+  salary: {
+    type: Number,
+    required: true,
+  },
   status: {
     type: String,
     enum: ["Active", "Inactive", "Training"],

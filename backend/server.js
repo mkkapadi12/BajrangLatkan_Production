@@ -6,6 +6,9 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Import routes
+const auth_route = require("./routes/auth.routes");
+
 app.use(cors());
 app.use(express.json());
 
@@ -25,6 +28,10 @@ connection.once("open", () => {
 });
 
 // Routes
+app.get("/api", (req, res) => {
+  res.send("Welcome to Bajrang Latkan API");
+});
+app.use("/api/auth", auth_route);
 app.use("/api/products", require("./routes/products"));
 app.use("/api/workers", require("./routes/workers"));
 

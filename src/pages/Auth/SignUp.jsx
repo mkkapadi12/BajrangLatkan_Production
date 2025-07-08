@@ -31,7 +31,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "@/services/api";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,20 +45,21 @@ export default function SignupPage() {
     fullName: "",
     email: "",
     phone: "",
+    gender: "",
     dateOfBirth: "",
     address: "",
 
     // Professional Information
     role: "",
     experience: "",
-    skills: "",
-    previousCompany: "",
 
     // Account Information
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
   });
+
+  const router = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,9 +82,41 @@ export default function SignupPage() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      const userData = {
+        ...formData,
+        experience: Number(formData.experience),
+      };
       // Success - redirect to login
+      console.log("User Data : ", userData);
+
+      const res_data = await api.createUser(userData);
+      setError(res_data.msg);
+
+      if (res_data.msg == "Registration successfully!") {
+        setFormData({
+          // Personal Information
+          fullName: "",
+          email: "",
+          phone: "",
+          gender: "",
+          dateOfBirth: "",
+          address: "",
+
+          // Professional Information
+          role: "",
+          experience: "",
+
+          // Account Information
+          password: "",
+          confirmPassword: "",
+          agreeToTerms: false,
+        });
+        router("/login");
+      }
+      console.log(res_data.msg);
     } catch (err) {
       setError("An error occurred. Please try again.");
+      console.log(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -108,10 +142,12 @@ export default function SignupPage() {
           formData.fullName &&
           formData.email &&
           formData.phone &&
-          formData.dateOfBirth
+          formData.dateOfBirth &&
+          formData.gender &&
+          formData.address
         );
       case 2:
-        return formData.role && formData.experience && formData.skills;
+        return formData.role && formData.experience;
       case 3:
         return (
           formData.password && formData.confirmPassword && formData.agreeToTerms
@@ -267,6 +303,22 @@ export default function SignupPage() {
                       />
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="role">Gender *</Label>
+                    <Select
+                      value={formData.gender}
+                      onValueChange={(value) => handleChange("gender", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MALE">Male</SelectItem>
+                        <SelectItem value="FEMALE">Female</SelectItem>
+                        <SelectItem value="OTHER">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
@@ -301,22 +353,7 @@ export default function SignupPage() {
                           <SelectValue placeholder="Select your role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="hodi-maker">Hodi Maker</SelectItem>
-                          <SelectItem value="spring-maker">
-                            Spring Maker
-                          </SelectItem>
-                          <SelectItem value="designer">Designer</SelectItem>
-                          <SelectItem value="quality-controller">
-                            Quality Controller
-                          </SelectItem>
-                          <SelectItem value="packaging-specialist">
-                            Packaging Specialist
-                          </SelectItem>
-                          <SelectItem value="traditional-maker">
-                            Traditional Maker
-                          </SelectItem>
-                          <SelectItem value="supervisor">Supervisor</SelectItem>
-                          <SelectItem value="trainee">Trainee</SelectItem>
+                          <SelectItem value="EMPLOYEE">EMPLOYEE</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -332,20 +369,18 @@ export default function SignupPage() {
                           <SelectValue placeholder="Select experience" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="fresher">
-                            Fresher (0 years)
-                          </SelectItem>
-                          <SelectItem value="0-1">0-1 years</SelectItem>
-                          <SelectItem value="1-2">1-2 years</SelectItem>
-                          <SelectItem value="2-5">2-5 years</SelectItem>
-                          <SelectItem value="5-10">5-10 years</SelectItem>
-                          <SelectItem value="10+">10+ years</SelectItem>
+                          <SelectItem value="0">Fresher (0 years)</SelectItem>
+                          <SelectItem value="1">1 years</SelectItem>
+                          <SelectItem value="2">2 years</SelectItem>
+                          <SelectItem value="3">3 years</SelectItem>
+                          <SelectItem value="5">5 years</SelectItem>
+                          <SelectItem value="10">10+ years</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="skills">Skills & Specializations *</Label>
                     <Textarea
                       id="skills"
@@ -358,9 +393,9 @@ export default function SignupPage() {
                     <p className="text-sm text-gray-500">
                       Separate multiple skills with commas
                     </p>
-                  </div>
+                  </div> */}
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="previousCompany">
                       Previous Company (Optional)
                     </Label>
@@ -376,7 +411,7 @@ export default function SignupPage() {
                         className="pl-10"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
 

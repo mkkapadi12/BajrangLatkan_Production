@@ -1,19 +1,19 @@
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = "http://localhost:5000/api";
 
 export const api = {
   // Products
   async getProducts(filters) {
     const params = new URLSearchParams(filters).toString();
     const response = await fetch(`${BASE_URL}/products?${params}`);
-    if (!response.ok) throw new Error('Failed to fetch products');
+    if (!response.ok) throw new Error("Failed to fetch products");
     return response.json();
   },
 
   async createProduct(data) {
     const response = await fetch(`${BASE_URL}/products`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -22,9 +22,9 @@ export const api = {
 
   async updateProduct(id, data) {
     const response = await fetch(`${BASE_URL}/products/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -33,7 +33,7 @@ export const api = {
 
   async deleteProduct(id) {
     const response = await fetch(`${BASE_URL}/products/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     return response.json();
   },
@@ -42,21 +42,21 @@ export const api = {
   async getWorkers(filters) {
     const params = new URLSearchParams(filters).toString();
     const response = await fetch(`${BASE_URL}/workers?${params}`);
-    if (!response.ok) throw new Error('Failed to fetch workers');
+    if (!response.ok) throw new Error("Failed to fetch workers");
     return response.json();
   },
 
   async getWorker(id) {
     const response = await fetch(`${BASE_URL}/workers/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch worker');
+    if (!response.ok) throw new Error("Failed to fetch worker");
     return response.json();
   },
 
   async createWorker(data) {
     const response = await fetch(`${BASE_URL}/workers`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -65,9 +65,9 @@ export const api = {
 
   async updateWorker(id, data) {
     const response = await fetch(`${BASE_URL}/workers/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -76,8 +76,24 @@ export const api = {
 
   async deleteWorker(id) {
     const response = await fetch(`${BASE_URL}/workers/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     return response.json();
+  },
+
+  async createUser(data) {
+    try {
+      const response = await fetch(`${BASE_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      // if (!response.ok) throw new Error("Failed to create user");
+      return response.json();
+    } catch (error) {
+      console.error(error.message);
+    }
   },
 };
