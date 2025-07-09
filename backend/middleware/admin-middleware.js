@@ -2,7 +2,7 @@ const adminMiddleware = (req, res, next) => {
   try {
     const isAdmin = req.user.role;
 
-    if (isAdmin) {
+    if (isAdmin === "ADMIN") {
       next();
     } else {
       return res
