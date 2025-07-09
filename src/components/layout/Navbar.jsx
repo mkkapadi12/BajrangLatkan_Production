@@ -18,6 +18,13 @@ export default function Navbar() {
     { name: "Contact", to: "/contact" },
   ];
 
+  const filteredNavigation = navigation.filter((item) => {
+    if (item.name === "Workers") {
+      return isLoggedIn && user?.role === "ADMIN";
+    }
+    return true;
+  });
+
   const isActive = (to) => {
     return navigate === to;
   };
@@ -34,7 +41,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="items-center hidden space-x-8 md:flex">
-            {navigation.map((item) => (
+            {filteredNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.to}
@@ -51,10 +58,10 @@ export default function Navbar() {
           <div className="items-center hidden space-x-4 md:flex">
             {isLoggedIn ? (
               <>
-                <Link to="/logout" className="w-full">
+                <Link to="/logout" className="w-full cursor-pointer">
                   <Button
                     variant="outline"
-                    className="text-white bg-transparent border-white hover:bg-white hover:text-purple-600"
+                    className="text-white bg-transparent border-white cursor-pointer hover:bg-white hover:text-purple-600"
                   >
                     Logout
                   </Button>
@@ -62,20 +69,21 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link to="/login" className="w-full">
+                <Link to="/login" className="w-full cursor-pointer">
                   <Button
                     variant="outline"
-                    className="text-white bg-transparent border-white hover:bg-white hover:text-purple-600"
+                    className="text-white bg-transparent border-white cursor-pointer hover:bg-white hover:text-purple-600"
                   >
                     Login
                   </Button>
                 </Link>
               </>
             )}
-
-            <Button className="text-black bg-yellow-500 hover:bg-yellow-600">
-              Get Started
-            </Button>
+            <Link>
+              <Button className="text-black bg-yellow-500 hover:bg-yellow-600">
+                Get Started
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu */}
@@ -99,7 +107,7 @@ export default function Navbar() {
                   </span>
                 </Link>
 
-                {navigation.map((item) => (
+                {filteredNavigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.to}
@@ -113,14 +121,29 @@ export default function Navbar() {
                 ))}
 
                 <div className="flex flex-col mt-8 space-y-4">
-                  <Link to="/login">
-                    <Button
-                      variant="outline"
-                      className="w-full text-purple-600 bg-transparent border-purple-600 hover:bg-purple-600 hover:text-white"
-                    >
-                      Login
-                    </Button>
-                  </Link>
+                  {isLoggedIn ? (
+                    <>
+                      <Link to="/logout" className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full text-white bg-purple-600"
+                        >
+                          Logout
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login" className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full text-white bg-purple-600"
+                        >
+                          Login
+                        </Button>
+                      </Link>
+                    </>
+                  )}
 
                   <Button className="bg-purple-600 hover:bg-purple-700">
                     Get Started

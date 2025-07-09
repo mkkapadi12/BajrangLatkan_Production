@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/auth.controller");
+const authMiddleware = require("../middleware/auth-middleware");
 
 //home route
 router.get("/", authController.home);
@@ -12,7 +13,7 @@ router.post("/signup", authController.register);
 router.post("/login", authController.login);
 
 //user profile route
-router.get("/user", authController.user);
+router.get("/user", authMiddleware, authController.user);
 
 //Profile update route
 // router.put("/profile", authController.profile);

@@ -14,6 +14,8 @@ import LoginPage from "./pages/Auth/Login";
 import SignupPage from "./pages/Auth/SignUp";
 import { Toaster } from "react-hot-toast";
 import Logout from "./pages/Auth/Logout";
+import { useAuthContext } from "./context/AuthContext";
+import PrivateRoute from "./Private/PrivateRoute";
 
 const App = () => {
   return (
@@ -23,15 +25,20 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/logout" element={<Logout />} />
-          {/* <Route path="/forgot-password" element={<div>Forgot Password Page</div>} /> */}
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/products" element={<ProductsPage />} />
-          <Route path="/workers" element={<WorkersPage />} />
+          <Route
+            path="/workers"
+            element={
+              <PrivateRoute>
+                <WorkersPage />
+              </PrivateRoute>
+            }
+          />
           <Route path="/workers/:id" element={<WorkerDetailsPage />} />
           {/* <Route path="/workers/:id" element={<SingleWorkerPage />} /> */}
-          {/* Add more routes as needed */}
           <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
       </Layout>
