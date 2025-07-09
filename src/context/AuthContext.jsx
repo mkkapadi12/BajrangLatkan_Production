@@ -3,7 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 const AuthContext = createContext();
-const BASE_URL = "http://localhost:5000/api/auth"; // Update with your actual base URL if needed
+// const BASE_URL = "http://localhost:5000/api/auth"; // Update with your actual base URL if needed
+const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
