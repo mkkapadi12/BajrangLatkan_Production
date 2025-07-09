@@ -8,6 +8,8 @@ const port = process.env.PORT || 5000;
 
 // Import routes
 const auth_route = require("./routes/auth.routes");
+const adminMiddleware = require("./middleware/admin-middleware");
+const authMiddleware = require("./middleware/auth-middleware");
 
 app.use(
   cors({
@@ -40,7 +42,12 @@ app.get("/api", (req, res) => {
 });
 app.use("/api/auth", auth_route);
 app.use("/api/products", require("./routes/products"));
-app.use("/api/workers", require("./routes/workers"));
+app.use(
+  "/api/workers",
+  authMiddleware,
+  adminMiddleware,
+  require("./routes/workers")
+);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

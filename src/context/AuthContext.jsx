@@ -7,7 +7,7 @@ const AuthContext = createContext();
 const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(localStorage.getItem("production_worker") || null);
   const [user, setUser] = useState(""); // Initialize with null to indicate no user initially
   // const [file, setFile] = useState(null);
   const isLoggedIn = !!token;

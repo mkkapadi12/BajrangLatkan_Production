@@ -42,7 +42,11 @@ export const api = {
   // Workers
   async getWorkers(filters) {
     const params = new URLSearchParams(filters).toString();
-    const response = await fetch(`${BASE_URL}/workers?${params}`);
+    const response = await fetch(`${BASE_URL}/workers?${params}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("production_worker")}`,
+      },
+    });
     if (!response.ok) throw new Error("Failed to fetch workers");
     return response.json();
   },
