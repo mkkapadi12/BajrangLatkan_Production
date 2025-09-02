@@ -2,7 +2,6 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { type } = require("os");
 
 const UserSchema = new mongoose.Schema({
   fullName: {
