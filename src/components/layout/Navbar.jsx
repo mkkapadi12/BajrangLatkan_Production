@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { navigation } from "@/constant";
 import { ICONS } from "@/Icons/icons";
+import { Button } from "../ui/button";
 
 export default function Navbar() {
   const { isLoggedIn, user } = useAuthContext();
