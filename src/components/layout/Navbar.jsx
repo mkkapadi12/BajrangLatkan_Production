@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { navigation } from "@/constant";
 import { ICONS } from "@/Icons/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export default function Navbar() {
   const { isLoggedIn, user } = useAuthContext();
