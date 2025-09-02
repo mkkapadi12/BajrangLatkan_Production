@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { navigation } from "@/constant";
 import { ICONS } from "@/Icons/icons";
 import { Button } from "@/components/ui/Button";
+import { showUserToast } from "@/Toast/customToast";
 
 export default function Navbar() {
   const { isLoggedIn, user } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
+  // console.log("User in Navbar:", user);
+
   const isActive = (to) => location.pathname === to;
+
+  useEffect(() => {
+    if (user && isLoggedIn) {
+      showUserToast(user);
+    }
+  }, [user]);
 
   return (
     <header className="sticky top-0 z-50 w-full mx-auto border-b shadow-sm border-bajrang-border bg-bajrang-bg">
@@ -49,6 +58,9 @@ export default function Navbar() {
                 <Button
                   variant="outline"
                   className="border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                  onClick={() => {
+                    showLogoutToast();
+                  }}
                 >
                   Logout
                 </Button>

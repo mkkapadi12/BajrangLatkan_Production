@@ -1,3 +1,4 @@
+import { showLogoutToast } from "@/Toast/customToast";
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -27,7 +28,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("production_worker");
     setToken(null);
     if (token == null) {
-      toast.success("Logout Successfully");
+      showLogoutToast();
     }
     setUser(""); // Clear the user data on logout
   };

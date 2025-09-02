@@ -47,7 +47,7 @@ export default function LoginPage() {
           storeTokenInLS(res_data.token);
           // Redirect to worker dashboard
           router("/");
-          toast.success("Login successful!");
+          // toast.success("Login successful!");
         } else {
           setError(res_data.msg || "Login failed. Please try again.");
         }
