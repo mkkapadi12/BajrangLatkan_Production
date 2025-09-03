@@ -1,9 +1,10 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const USER = require("../models/user.model");
+const WORKER = require("../models/user.model.js");
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization");
+  // console.log("Auth Token:", token);
 
   if (!token) {
     return res
@@ -12,15 +13,16 @@ const authMiddleware = async (req, res, next) => {
   }
 
   const jwtToken = token.replace("Bearer", "").trim();
+  // console.log("JWT Token:", jwtToken);
   try {
     const isVerified = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
     // console.log("Data :", isVerified);
 
-    const userData = await USER.findOne({ email: isVerified.email }).select({
+    const userData = await WORKER.findOne({ email: isVerified.email }).select({
       password: 0,
       confirmPassword: 0,
     });
-    // console.log("UserData :", user);
+    // console.log("WorkerData :", userData);
 
     req.user = userData;
     req.token = token;
@@ -28,7 +30,10 @@ const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({ msg: "Unauthorized ! Invalid Token" });
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({ msg: "Token expired, please login again" });
+    }
+    return res.status(401).json({ msg: "Unauthorized! Invalid Token" });
   }
 };
 

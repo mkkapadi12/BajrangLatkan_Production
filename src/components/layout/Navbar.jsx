@@ -6,6 +6,15 @@ import { navigation } from "@/constant";
 import { ICONS } from "@/Icons/icons";
 import { Button } from "@/components/ui/Button";
 import { showUserToast } from "@/Toast/customToast";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "../ui/menubar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Navbar() {
   const { isLoggedIn, user } = useAuthContext();
@@ -54,32 +63,73 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="items-center hidden space-x-4 md:flex">
             {isLoggedIn ? (
-              <Link to="/logout">
-                <Button
-                  variant="outline"
-                  className="border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
-                  onClick={() => {
-                    showLogoutToast();
-                  }}
-                >
-                  Logout
-                </Button>
-              </Link>
+              <Menubar className="!bg-white !border-none">
+                <MenubarMenu className="!border-none !bg-none !hover:bg-none">
+                  <MenubarTrigger className="!p-0 !bg-white">
+                    <Avatar className="w-10 h-10 transition-all duration-300 cursor-pointer md:w-12 md:h-12 ring-2 ring-bajrang-accent hover:ring-bajrang-warning">
+                      <AvatarImage
+                        src={user?.profileImage}
+                        alt="profile"
+                        className="object-cover w-full h-full rounded-full"
+                      />
+                      <AvatarFallback className="text-lg font-semibold text-bajrang-brand bg-bajrang-accent/20">
+                        {user?.fullName?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </MenubarTrigger>
+
+                  <MenubarContent className="bg-white shadow-xl rounded-2xl min-w-[200px] py-3 border border-bajrang-divider">
+                    {/* User Info */}
+                    <div className="px-4 py-2 text-center border-b border-bajrang-divider">
+                      <p className="text-xs text-bajrang-text">Hello 👋</p>
+                      <p className="font-semibold text-bajrang-brand">
+                        {user?.fullName}
+                      </p>
+                    </div>
+
+                    {/* Menu Items */}
+                    <Link to="/profile">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:bg-bajrang-accent/10 hover:text-bajrang-accent">
+                        👤 My Profile
+                      </MenubarItem>
+                    </Link>
+
+                    <Link to="/private/stories">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:bg-bajrang-accent/10 hover:text-bajrang-accent">
+                        ⚙️ Settings
+                      </MenubarItem>
+                    </Link>
+
+                    <MenubarSeparator className="my-2 border-bajrang-divider" />
+
+                    <Link to="/logout">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 text-red-500 transition-all rounded-lg cursor-pointer hover:bg-red-100 hover:text-red-600">
+                        🚪 Logout
+                      </MenubarItem>
+                    </Link>
+                  </MenubarContent>
+                </MenubarMenu>
+              </Menubar>
             ) : (
-              <Link to="/login">
-                <Button
-                  variant="outline"
-                  className="transition-all border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
-                >
-                  Login
-                </Button>
-              </Link>
+              <>
+                {/* Login Button */}
+                <Link to="/login">
+                  <Button
+                    variant="outline"
+                    className="px-5 py-2 transition-all shadow-sm border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white rounded-xl"
+                  >
+                    Login
+                  </Button>
+                </Link>
+
+                {/* Get Started Button */}
+                <Link to="/get-started">
+                  <Button className="px-5 py-2 text-white transition-all shadow-sm rounded-xl bg-bajrang-accent hover:bg-bajrang-warning">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
             )}
-            <Link to="/get-started">
-              <Button className="text-white bg-bajrang-accent hover:bg-bajrang-warning">
-                Get Started
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu */}

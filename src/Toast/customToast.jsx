@@ -36,7 +36,7 @@ export const showLogoutToast = () => {
     ),
     {
       position: "top-right",
-      duration: 4000,
+      duration: 1000,
     }
   );
 };
@@ -94,7 +94,7 @@ export const showUserToast = (user) => {
     ),
     {
       position: "top-right",
-      duration: 4000,
+      duration: 2000,
     }
   );
 };

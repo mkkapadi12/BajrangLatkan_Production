@@ -3,14 +3,20 @@ import {
   Eye,
   EyeOff,
   UserPlus,
-  Sparkles,
   User,
-  Mail,
-  Lock,
   Phone,
   MapPin,
   Briefcase,
+  Calendar,
+  IdCard,
+  Banknote,
+  ShieldCheck,
+  Plus,
+  X,
+  Image as ImageIcon,
+  AlertTriangle,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/Button";
 import {
   Card,
@@ -35,26 +41,63 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/services/api";
 import toast from "react-hot-toast";
 
-export default function SignupPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+/** Utility: convert File -> base64 string (optional photo upload) */
+const fileToBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    if (!file) return resolve("");
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+export default function WorkerSignup() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [error, setError] = useState("");
+
+  const [skillsInput, setSkillsInput] = useState("");
+  const [photoFile, setPhotoFile] = useState(null);
+
   const [formData, setFormData] = useState({
-    // Personal Information
+    // 1) Personal
     fullName: "",
-    email: "",
-    phone: "",
+    fatherHusbandName: "",
     gender: "",
     dateOfBirth: "",
-    address: "",
+    photo: "",
 
-    // Professional Information
-    role: "",
-    experience: "",
+    // 2) Contact
+    phone: "",
+    alternatePhone: "",
+    address: {
+      village: "",
+      taluka: "",
+      district: "",
+    },
+    emergencyContact: {
+      name: "",
+      phone: "",
+    },
 
-    // Account Information
+    // 3) Work & Skills
+    skills: [], // array of strings
+    workPreference: "",
+    experience: "", // number (years)
+    notes: "",
+
+    // 4) Bank / Payment
+    bankDetails: {
+      accountHolderName: "",
+      accountNumber: "",
+      ifsc: "",
+      upiId: "",
+    },
+
+    // 5) Account
+    email: "", // optional (can default to phone on backend)
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
@@ -62,384 +105,650 @@ export default function SignupPage() {
 
   const router = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (!formData.agreeToTerms) {
-      setError("Please agree to the terms and conditions");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const userData = {
-        ...formData,
-        experience: Number(formData.experience),
-      };
-      // Success - redirect to login
-      console.log("User Data : ", userData);
-
-      const res_data = await api.createUser(userData);
-      setError(res_data.msg);
-
-      if (res_data.msg == "Registration successfully!") {
-        setFormData({
-          // Personal Information
-          fullName: "",
-          email: "",
-          phone: "",
-          gender: "",
-          dateOfBirth: "",
-          address: "",
-
-          // Professional Information
-          role: "",
-          experience: "",
-
-          // Account Information
-          password: "",
-          confirmPassword: "",
-          agreeToTerms: false,
-        });
-        router("/login");
-        toast.success("Registration successfully");
-      }
-      console.log(res_data.msg);
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.log(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (error) setError("");
   };
 
-  const nextStep = () => {
-    if (currentStep < 3) setCurrentStep(currentStep + 1);
+  const handleNestedChange = (group, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [group]: { ...prev[group], [field]: value },
+    }));
+    if (error) setError("");
   };
 
-  const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  const addSkill = () => {
+    const v = skillsInput.trim();
+    if (!v) return;
+    if (!formData.skills.includes(v)) {
+      setFormData((p) => ({ ...p, skills: [...p.skills, v] }));
+    }
+    setSkillsInput("");
+  };
+
+  const removeSkill = (skill) => {
+    setFormData((p) => ({
+      ...p,
+      skills: p.skills.filter((s) => s !== skill),
+    }));
   };
 
   const isStepValid = () => {
     switch (currentStep) {
-      case 1:
+      case 1: {
+        const { fullName, gender, dateOfBirth } = formData;
+        return fullName && gender && dateOfBirth;
+      }
+      case 2: {
+        const { phone, address, emergencyContact } = formData;
         return (
-          formData.fullName &&
-          formData.email &&
-          formData.phone &&
-          formData.dateOfBirth &&
-          formData.gender &&
-          formData.address
+          phone &&
+          address.village &&
+          address.taluka &&
+          address.district &&
+          emergencyContact.name &&
+          emergencyContact.phone
         );
-      case 2:
-        return formData.role && formData.experience;
-      case 3:
+      }
+      case 3: {
+        const { workPreference, experience } = formData;
         return (
-          formData.password && formData.confirmPassword && formData.agreeToTerms
+          workPreference && `${experience}` !== "" && Number(experience) >= 0
         );
+      }
+      case 4: {
+        // Bank is optional; if any bank field filled, ensure minimal validity
+        const { accountHolderName, accountNumber, ifsc, upiId } =
+          formData.bankDetails;
+        const anyFilled = accountHolderName || accountNumber || ifsc || upiId;
+        if (!anyFilled) return true;
+        // Minimal validation when provided
+        return !!(accountHolderName && (accountNumber || upiId));
+      }
+      case 5: {
+        const { password, confirmPassword, agreeToTerms, email } = formData;
+        return (
+          email &&
+          password &&
+          confirmPassword &&
+          password === confirmPassword &&
+          agreeToTerms
+        );
+      }
       default:
         return false;
     }
   };
 
+  const nextStep = () => {
+    if (currentStep < 5 && isStepValid()) setCurrentStep((s) => s + 1);
+  };
+  const prevStep = () => {
+    if (currentStep > 1) setCurrentStep((s) => s - 1);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!isStepValid()) {
+      setError("Please complete all required fields.");
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const photoBase64 = await fileToBase64(photoFile);
+      const payload = {
+        ...formData,
+        experience: Number(formData.experience || 0),
+        email: formData.email || formData.phone,
+        photo: photoBase64 || formData.photo || "",
+      };
+
+      console.log("worker data :", payload);
+
+      // 🔧 Adjust to your API method if different
+      const res = await api.createUser(payload);
+
+      if (res?.msg === "Worker registered successfully!") {
+        toast.success("Registration successfully");
+        // reset
+        setFormData({
+          fullName: "",
+          fatherHusbandName: "",
+          gender: "",
+          dateOfBirth: "",
+          photo: "",
+          phone: "",
+          alternatePhone: "",
+          address: { village: "", taluka: "", district: "" },
+          emergencyContact: { name: "", phone: "" },
+          skills: [],
+          workPreference: "",
+          experience: "",
+          notes: "",
+          bankDetails: {
+            accountHolderName: "",
+            accountNumber: "",
+            ifsc: "",
+            upiId: "",
+          },
+          email: "",
+          password: "",
+          confirmPassword: "",
+          agreeToTerms: false,
+        });
+        setPhotoFile(null);
+        setCurrentStep(1);
+        router("/login");
+      } else {
+        setError(res?.msg || "Registration failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err?.message || "An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const StepBadge = ({ step }) => (
+    <div className="flex items-center">
+      {/* Step Circle */}
+      <div
+        className={`flex items-center justify-center rounded-full font-semibold border
+        w-8 h-8 text-xs sm:w-9 sm:h-9 sm:text-sm md:w-10 md:h-10 md:text-base
+        ${
+          step <= currentStep
+            ? "bg-bajrang-accent text-bajrang-brand border-bajrang-accent"
+            : "bg-white text-bajrang-text border-bajrang-divider"
+        }`}
+      >
+        {step}
+      </div>
+
+      {/* Connector */}
+      {step < 5 && (
+        <div
+          className={`mx-1 sm:mx-2 h-0.5
+          w-8 sm:w-14 md:w-20
+          ${step < currentStep ? "bg-bajrang-accent" : "bg-bajrang-divider"}`}
+        />
+      )}
+    </div>
+  );
+
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-purple-50 to-white">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <Link to="/" className="inline-flex items-center mb-6 space-x-2">
-            <Sparkles className="w-10 h-10 text-purple-600" />
-            <span className="text-2xl font-bold text-purple-800">
-              Bajrang Latkan
-            </span>
-          </Link>
-          <h1 className="mb-2 text-3xl font-bold text-gray-900">
-            Join Our Team
+    <div className="flex items-center justify-center min-h-screen px-4 py-8 bg-bajrang-bg">
+      <div className="w-full max-w-3xl">
+        {/* Title */}
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-bajrang-text">
+            Worker Registration
           </h1>
-          <p className="text-gray-600">
-            Create your worker account to get started
+          <p className="mt-1 text-bajrang-textSecondary">
+            Create your account to start receiving assignments
           </p>
         </div>
 
-        {/* Progress Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="flex items-center">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    step <= currentStep
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-200 text-gray-600"
-                  }`}
-                >
-                  {step}
-                </div>
-                {step < 3 && (
-                  <div
-                    className={`w-16 h-1 mx-2 ${
-                      step < currentStep ? "bg-purple-600" : "bg-gray-200"
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-2">
-            <span className="text-sm text-gray-600">
-              Step {currentStep} of 3:{" "}
-              {currentStep === 1
-                ? "Personal Information"
-                : currentStep === 2
-                ? "Professional Details"
-                : "Account Setup"}
-            </span>
-          </div>
+        {/* Progress */}
+        <div className="flex items-center justify-center mb-6">
+          {[1, 2, 3, 4, 5].map((s) => (
+            <StepBadge key={s} step={s} />
+          ))}
+        </div>
+        <div className="mb-4 text-sm text-center text-bajrang-muted">
+          Step {currentStep} of 5
         </div>
 
-        {/* Signup Form */}
-        <Card className="border-purple-100 shadow-lg">
-          <CardHeader className="pb-6 space-y-1">
-            <CardTitle className="flex items-center justify-center text-2xl text-center">
-              <UserPlus className="w-6 h-6 mr-2 text-purple-600" />
-              Worker Registration
+        <Card className="border border-bajrang-border shadow-card bg-bajrang-surface">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center justify-center text-2xl text-bajrang-text">
+              <UserPlus className="w-6 h-6 mr-2 text-bajrang-brand" />
+              Worker Signup
             </CardTitle>
-            <CardDescription className="text-center">
-              Fill in your details to create your account
+            <CardDescription className="text-center text-bajrang-textSecondary">
+              Fill the details step by step
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <Alert className="border-red-200 bg-red-50">
-                  <AlertDescription className="text-red-800">
-                    {error}
-                  </AlertDescription>
-                </Alert>
-              )}
 
-              {/* Step 1: Personal Information */}
+          <CardContent>
+            {error && (
+              <Alert className="mb-4 border-bajrang-danger bg-red-50">
+                <AlertDescription className="flex items-center gap-2 text-bajrang-danger">
+                  <AlertTriangle className="w-4 h-4" /> {error}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* STEP 1: Personal */}
               {currentStep === 1 && (
                 <div className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="fullName">Full Name *</Label>
                       <div className="relative">
-                        <User className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                        <User className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           id="fullName"
-                          placeholder="Enter your full name"
+                          className="pl-10"
+                          placeholder="Enter full name"
                           value={formData.fullName}
                           onChange={(e) =>
                             handleChange("fullName", e.target.value)
                           }
-                          className="pl-10"
                           required
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
+                      <Label htmlFor="fatherHusbandName">
+                        Father/Husband Name
+                      </Label>
+                      <Input
+                        id="fatherHusbandName"
+                        placeholder="Enter name"
+                        value={formData.fatherHusbandName}
+                        onChange={(e) =>
+                          handleChange("fatherHusbandName", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="gender">Gender *</Label>
+                      <Select
+                        value={formData.gender}
+                        onValueChange={(v) => handleChange("gender", v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-bajrang-surface">
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="dateOfBirth">Date of Birth *</Label>
                       <div className="relative">
-                        <Mail className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                        <Calendar className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
-                          id="email"
-                          type="email"
-                          placeholder="Enter your email"
-                          value={formData.email}
-                          onChange={(e) =>
-                            handleChange("email", e.target.value)
-                          }
+                          id="dateOfBirth"
+                          type="date"
                           className="pl-10"
+                          value={formData.dateOfBirth}
+                          onChange={(e) =>
+                            handleChange("dateOfBirth", e.target.value)
+                          }
                           required
                         />
                       </div>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="photo">Photo (optional)</Label>
+                      <div className="flex items-center gap-3">
+                        <label className="inline-flex items-center px-3 py-2 transition border rounded-lg cursor-pointer border-bajrang-border bg-bajrang-surfaceAlt hover:bg-bajrang-hover">
+                          <ImageIcon className="w-4 h-4 mr-2 text-bajrang-muted" />
+                          <span className="text-sm">Upload</span>
+                          <input
+                            id="photo"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) =>
+                              setPhotoFile(e.target.files?.[0] || null)
+                            }
+                          />
+                        </label>
+                        {photoFile && (
+                          <span className="text-sm truncate text-bajrang-textSecondary">
+                            {photoFile.name}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
+                </div>
+              )}
 
+              {/* STEP 2: Contact */}
+              {currentStep === 2 && (
+                <div className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number *</Label>
                       <div className="relative">
-                        <Phone className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                        <Phone className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           id="phone"
                           type="tel"
-                          placeholder="+91 98765 43210"
+                          className="pl-10"
+                          placeholder="+91 9XXXXXXXXX"
                           value={formData.phone}
                           onChange={(e) =>
                             handleChange("phone", e.target.value)
                           }
-                          className="pl-10"
                           required
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+                      <Label htmlFor="alternatePhone">Alternate Phone</Label>
                       <Input
-                        id="dateOfBirth"
-                        type="date"
-                        value={formData.dateOfBirth}
+                        id="alternatePhone"
+                        type="tel"
+                        placeholder="+91 9XXXXXXXXX"
+                        value={formData.alternatePhone}
                         onChange={(e) =>
-                          handleChange("dateOfBirth", e.target.value)
+                          handleChange("alternatePhone", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Address *</Label>
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="relative">
+                        <MapPin className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <Input
+                          className="pl-10"
+                          placeholder="Village"
+                          value={formData.address.village}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              "address",
+                              "village",
+                              e.target.value
+                            )
+                          }
+                          required
+                        />
+                      </div>
+                      <Input
+                        placeholder="Taluka"
+                        value={formData.address.taluka}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "address",
+                            "taluka",
+                            e.target.value
+                          )
+                        }
+                        required
+                      />
+                      <Input
+                        placeholder="District"
+                        value={formData.address.district}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "address",
+                            "district",
+                            e.target.value
+                          )
                         }
                         required
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Gender *</Label>
-                    <Select
-                      value={formData.gender}
-                      onValueChange={(value) => handleChange("gender", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your gender" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MALE">Male</SelectItem>
-                        <SelectItem value="FEMALE">Female</SelectItem>
-                        <SelectItem value="OTHER">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Address</Label>
-                    <div className="relative">
-                      <MapPin className="absolute w-4 h-4 text-gray-400 left-3 top-3" />
-                      <Textarea
-                        id="address"
-                        placeholder="Enter your complete address"
-                        value={formData.address}
-                        onChange={(e) =>
-                          handleChange("address", e.target.value)
-                        }
-                        className="pl-10"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2: Professional Information */}
-              {currentStep === 2 && (
-                <div className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="role">Role/Position *</Label>
-                      <Select
-                        value={formData.role}
-                        onValueChange={(value) => handleChange("role", value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="EMPLOYEE">EMPLOYEE</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="experience">Experience *</Label>
-                      <Select
-                        value={formData.experience}
-                        onValueChange={(value) =>
-                          handleChange("experience", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select experience" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="0">Fresher (0 years)</SelectItem>
-                          <SelectItem value="1">1 years</SelectItem>
-                          <SelectItem value="2">2 years</SelectItem>
-                          <SelectItem value="3">3 years</SelectItem>
-                          <SelectItem value="5">5 years</SelectItem>
-                          <SelectItem value="10">10+ years</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="skills">Skills & Specializations *</Label>
-                    <Textarea
-                      id="skills"
-                      placeholder="List your skills (e.g., Hodi making, Spring crafting, Traditional designs, Quality control)"
-                      value={formData.skills}
-                      onChange={(e) => handleChange("skills", e.target.value)}
-                      rows={3}
-                      required
-                    />
-                    <p className="text-sm text-gray-500">
-                      Separate multiple skills with commas
-                    </p>
-                  </div> */}
-
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="previousCompany">
-                      Previous Company (Optional)
-                    </Label>
-                    <div className="relative">
-                      <Briefcase className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                      <Label htmlFor="emgName">Emergency Contact Name *</Label>
                       <Input
-                        id="previousCompany"
-                        placeholder="Enter previous company name"
-                        value={formData.previousCompany}
+                        id="emgName"
+                        placeholder="Name"
+                        value={formData.emergencyContact.name}
                         onChange={(e) =>
-                          handleChange("previousCompany", e.target.value)
+                          handleNestedChange(
+                            "emergencyContact",
+                            "name",
+                            e.target.value
+                          )
                         }
-                        className="pl-10"
+                        required
                       />
                     </div>
-                  </div> */}
+                    <div className="space-y-2">
+                      <Label htmlFor="emgPhone">
+                        Emergency Contact Phone *
+                      </Label>
+                      <Input
+                        id="emgPhone"
+                        type="tel"
+                        placeholder="+91 9XXXXXXXXX"
+                        value={formData.emergencyContact.phone}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "emergencyContact",
+                            "phone",
+                            e.target.value
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {/* Step 3: Account Setup */}
+              {/* STEP 3: Work & Skills */}
               {currentStep === 3 && (
                 <div className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="password">Password *</Label>
+                      <Label>Work Preference *</Label>
+                      <Select
+                        value={formData.workPreference}
+                        onValueChange={(v) => handleChange("workPreference", v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select preference" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Full-time">Full-time</SelectItem>
+                          <SelectItem value="Part-time">Part-time</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Experience (years) *</Label>
                       <div className="relative">
-                        <Lock className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                        <Briefcase className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
-                          id="password"
+                          type="number"
+                          min="0"
+                          step="1"
+                          className="pl-10"
+                          placeholder="0"
+                          value={formData.experience}
+                          onChange={(e) =>
+                            handleChange("experience", e.target.value)
+                          }
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Skills (press Enter to add)</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="e.g., Beads, Threading, Embroidery"
+                        value={skillsInput}
+                        onChange={(e) => setSkillsInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addSkill();
+                          }
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        onClick={addSkill}
+                        className="bg-bajrang-brand hover:opacity-90"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add
+                      </Button>
+                    </div>
+                    {formData.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {formData.skills.map((s) => (
+                          <span
+                            key={s}
+                            className="inline-flex items-center gap-1 px-2 py-1 text-sm border rounded-md bg-bajrang-surfaceAlt text-bajrang-text border-bajrang-border"
+                          >
+                            {s}
+                            <button
+                              type="button"
+                              onClick={() => removeSkill(s)}
+                              className="hover:text-bajrang-danger"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Notes (optional)</Label>
+                    <Textarea
+                      rows={3}
+                      placeholder="Any special instructions or remarks"
+                      value={formData.notes}
+                      onChange={(e) => handleChange("notes", e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 4: Bank / Payment */}
+              {currentStep === 4 && (
+                <div className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>Account Holder Name</Label>
+                      <Input
+                        placeholder="As per bank"
+                        value={formData.bankDetails.accountHolderName}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "bankDetails",
+                            "accountHolderName",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Account Number</Label>
+                      <Input
+                        placeholder="XXXXXXXXXXXX"
+                        value={formData.bankDetails.accountNumber}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "bankDetails",
+                            "accountNumber",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>IFSC</Label>
+                      <Input
+                        placeholder="e.g., HDFC0001234"
+                        value={formData.bankDetails.ifsc}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "bankDetails",
+                            "ifsc",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>UPI ID (optional)</Label>
+                      <div className="relative">
+                        <Banknote className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <Input
+                          className="pl-10"
+                          placeholder="name@upi"
+                          value={formData.bankDetails.upiId}
+                          onChange={(e) =>
+                            handleNestedChange(
+                              "bankDetails",
+                              "upiId",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 text-sm border rounded-md border-bajrang-border bg-bajrang-surfaceAlt text-bajrang-textSecondary">
+                    Bank details are optional. If left blank, salary can be paid
+                    in cash.
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 5: Account */}
+              {currentStep === 5 && (
+                <div className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>email</Label>
+                      <div className="relative">
+                        <IdCard className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <Input
+                          className="pl-10"
+                          placeholder="If empty, we’ll use your phone"
+                          value={formData.email}
+                          onChange={(e) =>
+                            handleChange("email", e.target.value)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Password *</Label>
+                      <div className="relative">
+                        <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Create a strong password"
                           value={formData.password}
                           onChange={(e) =>
                             handleChange("password", e.target.value)
                           }
-                          className="pl-10 pr-10"
+                          className="pr-10"
                           required
                         />
                         <button
                           type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute text-gray-400 transform -translate-y-1/2 right-3 top-1/2 hover:text-gray-600"
+                          onClick={() => setShowPassword((s) => !s)}
+                          className="absolute -translate-y-1/2 right-3 top-1/2 text-bajrang-muted hover:text-bajrang-text"
                         >
                           {showPassword ? (
                             <EyeOff className="w-4 h-4" />
@@ -449,31 +758,25 @@ export default function SignupPage() {
                         </button>
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">
-                        Confirm Password *
-                      </Label>
+                    <div className="space-y-2 md:col-span-2">
+                      <Label>Confirm Password *</Label>
                       <div className="relative">
-                        <Lock className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                         <Input
-                          id="confirmPassword"
-                          type={showConfirmPassword ? "text" : "password"}
-                          placeholder="Confirm your password"
+                          type={showConfirm ? "text" : "password"}
+                          placeholder="Re-enter password"
                           value={formData.confirmPassword}
                           onChange={(e) =>
                             handleChange("confirmPassword", e.target.value)
                           }
-                          className="pl-10 pr-10"
+                          className="pr-10"
                           required
                         />
                         <button
                           type="button"
-                          onClick={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
-                          }
-                          className="absolute text-gray-400 transform -translate-y-1/2 right-3 top-1/2 hover:text-gray-600"
+                          onClick={() => setShowConfirm((s) => !s)}
+                          className="absolute -translate-y-1/2 right-3 top-1/2 text-bajrang-muted hover:text-bajrang-text"
                         >
-                          {showConfirmPassword ? (
+                          {showConfirm ? (
                             <EyeOff className="w-4 h-4" />
                           ) : (
                             <Eye className="w-4 h-4" />
@@ -483,70 +786,66 @@ export default function SignupPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-2">
-                      <Checkbox
-                        id="agreeToTerms"
-                        checked={formData.agreeToTerms}
-                        onCheckedChange={(checked) =>
-                          handleChange("agreeToTerms", checked)
-                        }
-                        className="mt-1"
-                      />
-                      <Label
-                        htmlFor="agreeToTerms"
-                        className="text-sm leading-relaxed text-gray-600"
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="agree"
+                      checked={formData.agreeToTerms}
+                      onCheckedChange={(v) =>
+                        handleChange("agreeToTerms", Boolean(v))
+                      }
+                      className="mt-1"
+                    />
+                    <Label
+                      htmlFor="agree"
+                      className="text-sm text-bajrang-textSecondary"
+                    >
+                      I agree to the{" "}
+                      <Link
+                        to="/terms"
+                        className="underline text-bajrang-accent underline-offset-4"
                       >
-                        I agree to the{" "}
-                        <Link
-                          to="/terms"
-                          className="text-purple-600 hover:text-purple-800"
-                        >
-                          Terms and Conditions
-                        </Link>{" "}
-                        and{" "}
-                        <Link
-                          to="/privacy"
-                          className="text-purple-600 hover:text-purple-800"
-                        >
-                          Privacy Policy
-                        </Link>
-                      </Label>
-                    </div>
+                        Terms & Conditions
+                      </Link>{" "}
+                      and{" "}
+                      <Link
+                        to="/privacy"
+                        className="underline text-bajrang-accent underline-offset-4"
+                      >
+                        Privacy Policy
+                      </Link>
+                      .
+                    </Label>
+                  </div>
 
-                    <div className="p-4 border border-purple-200 rounded-lg bg-purple-50">
-                      <h4 className="mb-2 text-sm font-medium text-purple-800">
-                        Account Review Process:
-                      </h4>
-                      <p className="text-xs text-purple-700">
-                        Your account will be reviewed by our HR team within
-                        24-48 hours. You'll receive an email confirmation once
-                        approved.
-                      </p>
-                    </div>
+                  <div className="flex items-center gap-2 p-3 text-sm border rounded-md border-bajrang-border bg-bajrang-surfaceAlt text-bajrang-textSecondary">
+                    <ShieldCheck className="w-4 h-4 text-bajrang-success" />
+                    Your information is kept secure and used only for assignment
+                    & salary processing.
                   </div>
                 </div>
               )}
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between pt-6">
-                {currentStep > 1 && (
+              {/* Controls */}
+              <div className="flex justify-between pt-4">
+                {currentStep > 1 ? (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={prevStep}
-                    className="bg-transparent border-purple-200"
+                    className="border-bajrang-border text-bajrang-text hover:bg-bajrang-hover"
                   >
                     Previous
                   </Button>
+                ) : (
+                  <div />
                 )}
 
-                {currentStep < 3 ? (
+                {currentStep < 5 ? (
                   <Button
                     type="button"
                     onClick={nextStep}
                     disabled={!isStepValid()}
-                    className="ml-auto bg-purple-600 hover:bg-purple-700"
+                    className="text-white bg-bajrang-brand hover:opacity-90 disabled:opacity-50"
                   >
                     Next
                   </Button>
@@ -554,11 +853,11 @@ export default function SignupPage() {
                   <Button
                     type="submit"
                     disabled={isLoading || !isStepValid()}
-                    className="ml-auto bg-purple-600 hover:bg-purple-700"
+                    className="text-white bg-bajrang-brand hover:opacity-90 disabled:opacity-50"
                   >
                     {isLoading ? (
                       <div className="flex items-center">
-                        <div className="w-4 h-4 mr-2 border-b-2 border-white rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 mr-2 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
                         Creating Account...
                       </div>
                     ) : (
@@ -570,13 +869,13 @@ export default function SignupPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-bajrang-textSecondary">
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="font-medium text-purple-600 hover:text-purple-800"
+                  className="font-medium underline text-bajrang-brand underline-offset-4"
                 >
-                  Sign in here
+                  Sign in
                 </Link>
               </p>
             </div>

@@ -1,11 +1,11 @@
 import { showLogoutToast } from "@/Toast/customToast";
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const AuthContext = createContext();
-// const BASE_URL = "http://localhost:5000/api/auth"; // Update with your actual base URL if needed
-const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
+const BASE_URL = "http://localhost:5000/api/auth"; // Update with your actual base URL if needed
+// const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(
@@ -43,52 +43,13 @@ const AuthProvider = ({ children }) => {
         },
       });
       const userInfo = res.data;
-      setUser(userInfo.userData); // Update user state
+      setUser(userInfo.workerData); // Update user state
     } catch (error) {
       console.error("Can't fetch user data:", error);
       userLogout(); // Logout if authentication fails
     }
   };
 
-  // Handle file change
-  // const handleFileChange = (e) => {
-  // console.log(e.target.files[0]);
-  //   setFile(e.target.files[0]);
-  // };
-
-  // const profileUpdate = async (data) => {
-  //   if (!file) return alert("Please select an image!");
-
-  //   const formData = new FormData();
-  //   formData.append("image", file);
-  //   Object.keys(data).forEach((key) => formData.append(key, data[key]));
-
-  //   try {
-  //     const res = await axios.patch(
-  //       "https://bajrang-2-0-server.vercel.app/api/auth/user/profile",
-  //       formData, // Pass the data as the request body
-  //       {
-  //         headers: {
-  //           Authorization: authorizationToken, // Include the token in the headers
-  //           "Content-Type": "multipart/form-data", // Set the content type as multipart form data
-  //         },
-  //       }
-  //     );
-
-  //     toast.success("User updated successfully");
-  //     setFile(null);
-  //     return res.data; // Return the response data
-  //   } catch (error) {
-  //     console.error(
-  //       "Error updating profile:",
-  //       error.response?.data || error.message
-  //     );
-  //     toast.error("Error Updating Profile");
-  //     throw error; // Propagate the error for further handling
-  //   }
-  // };
-
-  // Effect to fetch user data whenever the token changes
   useEffect(() => {
     if (token) {
       userAuthentication();
@@ -110,8 +71,6 @@ const AuthProvider = ({ children }) => {
         user,
         token,
         authorizationToken,
-        // profileUpdate,
-        // handleFileChange,
       }}
     >
       {children}
