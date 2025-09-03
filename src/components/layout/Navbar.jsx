@@ -88,63 +88,75 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                className="transition-all duration-300 rounded-full shadow-md text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
               >
                 <ICONS.MENU className="w-6 h-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] bg-white p-5">
-              <div className="flex flex-col mt-8 space-y-4">
-                <Link to="/" className="flex items-center mb-8 space-x-2">
-                  <ICONS.SPARKLES className="w-8 h-8 text-bajrang-brand" />
-                  <span className="text-xl font-bold text-bajrang-brand">
-                    Bajrang Latkan
-                  </span>
-                </Link>
 
+            <SheetContent
+              side="right"
+              className="w-[280px] bg-bajrang-bg p-6 shadow-2xl rounded-l-2xl"
+            >
+              {/* Logo */}
+              <div className="flex items-center mb-10 space-x-3">
+                <ICONS.SPARKLES className="w-8 h-8 text-bajrang-accent animate-spin-slow" />
+                <span className="text-xl font-extrabold tracking-wide text-bajrang-brand">
+                  Bajrang Latkan
+                </span>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="flex flex-col space-y-5">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.to}
                     onClick={() => setIsOpen(false)}
-                    className={`text-lg font-medium transition-colors ${
+                    className={`text-lg font-semibold transition-all duration-300 px-3 py-2 rounded-lg ${
                       isActive(item.to)
-                        ? "text-accent"
-                        : "text-gray-700 hover:text-bajrang-brand"
+                        ? "text-bajrang-brand bg-bajrang-accent/20 shadow-sm"
+                        : "text-bajrang-text hover:text-bajrang-brand hover:bg-bajrang-accent/10"
                     }`}
                   >
                     {item.name}
                   </Link>
                 ))}
+              </div>
 
-                <div className="flex flex-col mt-8 space-y-4">
-                  {isLoggedIn ? (
-                    <Link to="/logout">
-                      <Button
-                        variant="outline"
-                        className="w-full border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
-                      >
-                        Logout
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Link to="/login">
-                      <Button
-                        variant="outline"
-                        className="w-full border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
-                      >
-                        Login
-                      </Button>
-                    </Link>
-                  )}
-
-                  <Link to="/get-started">
-                    <Button className="w-full text-white bg-accent hover:bg-warning">
-                      Get Started
+              {/* Action Buttons */}
+              <div className="flex flex-col mt-10 space-y-4">
+                {isLoggedIn ? (
+                  <Link to="/logout">
+                    <Button
+                      variant="outline"
+                      className="w-full font-semibold transition-all duration-300 rounded-lg border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Logout
                     </Button>
                   </Link>
-                </div>
+                ) : (
+                  <Link to="/login">
+                    <Button
+                      variant="outline"
+                      className="w-full font-semibold transition-all duration-300 rounded-lg border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
+
+                <Link to="/get-started">
+                  <Button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-bajrang-accent hover:bg-yellow-500"
+                  >
+                    🚀 Get Started
+                  </Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>

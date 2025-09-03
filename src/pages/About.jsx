@@ -1,6 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Users, Factory, Target, Award } from "lucide-react";
+import {
+  Users,
+  Factory,
+  Target,
+  Award,
+  UserCheck,
+  Settings,
+} from "lucide-react";
 
 const About = () => {
   return (
@@ -15,7 +22,7 @@ const About = () => {
         >
           About <span className="text-bajrang-accent">Bajrang Latkan</span>
         </motion.h1>
-        <p className="max-w-2xl mx-auto mt-4 text-lg text-bajrang-textSecondary md:text-xl text-white/90">
+        <p className="max-w-2xl mx-auto mt-4 text-lg md:text-xl text-white/90">
           Blending tradition with technology to simplify <br />
           <span className="font-semibold text-bajrang-accent">
             Latkan Manufacturing
@@ -77,40 +84,58 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* How It's Useful Section */}
       <section className="px-6 py-16 md:px-12 lg:px-20 bg-bajrang-surface">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-bajrang-brand">Our Team</h2>
-          <p className="mt-2 text-bajrang-textSecondary">
-            A family-run business powered by community and tradition.
-          </p>
-        </div>
-        <div className="grid max-w-5xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
-          {[
-            {
-              role: "Manufacturing & Production",
-              name: "Handled by Parents",
-              desc: "Managing raw materials, distributing work, and ensuring quality.",
-            },
-            {
-              role: "Sales & Marketing",
-              name: "Handled by Mama (Uncle)",
-              desc: "Connecting finished products to the market with trust and reputation.",
-            },
-          ].map((person, idx) => (
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="mb-10 text-3xl font-bold text-bajrang-brand">
+            How Bajrang Latkan Helps
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Workers Card */}
             <motion.div
-              key={idx}
-              whileHover={{ scale: 1.03 }}
-              className="p-6 border shadow-sm bg-bajrang-surfaceAlt border-bajrang-divider rounded-2xl"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="p-8 text-left transition border shadow-md bg-bajrang-surface rounded-2xl border-bajrang-border hover:shadow-lg"
             >
-              <Users className="w-8 h-8 mb-3 text-bajrang-secondary" />
-              <h3 className="text-lg font-semibold text-bajrang-text">
-                {person.role}
-              </h3>
-              <p className="font-medium text-bajrang-accent">{person.name}</p>
-              <p className="mt-2 text-bajrang-textSecondary">{person.desc}</p>
+              <div className="flex items-center mb-4">
+                <Users className="w-10 h-10 text-bajrang-accent" />
+                <h3 className="ml-3 text-xl font-semibold text-bajrang-text">
+                  For Workers
+                </h3>
+              </div>
+              <ul className="space-y-3 text-bajrang-textSecondary">
+                <li>📦 Get work assignments directly online</li>
+                <li>📊 Track progress and submissions easily</li>
+                <li>💰 View monthly salary and payment history</li>
+                <li>🤝 Transparency in work & payments</li>
+              </ul>
             </motion.div>
-          ))}
+
+            {/* Admin Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="p-8 text-left transition border shadow-md bg-bajrang-surface rounded-2xl border-bajrang-border hover:shadow-lg"
+            >
+              <div className="flex items-center mb-4">
+                <Settings className="w-10 h-10 text-bajrang-secondary" />
+                <h3 className="ml-3 text-xl font-semibold text-bajrang-text">
+                  For Admin
+                </h3>
+              </div>
+              <ul className="space-y-3 text-bajrang-textSecondary">
+                <li>📝 Assign work & manage raw material distribution</li>
+                <li>✅ Verify product quality & quantity</li>
+                <li>📈 Track worker performance & progress</li>
+                <li>💵 Auto-calculate salaries with accuracy</li>
+                <li>📑 Access detailed analytics & reports</li>
+              </ul>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>
