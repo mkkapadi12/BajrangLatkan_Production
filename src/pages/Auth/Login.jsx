@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, LogIn, Sparkles, User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import {
   Card,
@@ -15,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/services/api";
 import { useAuthContext } from "@/context/AuthContext";
+import { ICONS } from "@/Icons/icons";
 
 export default function LoginPage() {
   const { storeTokenInLS } = useAuthContext();
@@ -72,7 +72,7 @@ export default function LoginPage() {
         <Card className="shadow-lg border-bajrang-border bg-bajrang-card">
           <CardHeader className="pb-6 space-y-1">
             <CardTitle className="flex items-center justify-center text-2xl text-center text-bajrang-text">
-              <LogIn className="w-6 h-6 mr-2 text-bajrang-accent" />
+              <ICONS.LOGIN className="w-6 h-6 mr-2 text-bajrang-accent" />
               Worker Login
             </CardTitle>
             <CardDescription className="text-center text-bajrang-muted">
@@ -94,7 +94,7 @@ export default function LoginPage() {
                   Email Address
                 </Label>
                 <div className="relative">
-                  <User className="absolute w-4 h-4 transform -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                  <ICONS.USER className="absolute w-4 h-4 transform -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                   <Input
                     id="email"
                     type="email"
@@ -112,7 +112,7 @@ export default function LoginPage() {
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute w-4 h-4 transform -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                  <ICONS.LOCK className="absolute w-4 h-4 transform -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -128,9 +128,9 @@ export default function LoginPage() {
                     className="absolute transform -translate-y-1/2 text-bajrang-muted right-3 top-1/2 hover:text-bajrang-text"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
+                      <ICONS.EYEOFF className="w-4 h-4" />
                     ) : (
-                      <Eye className="w-4 h-4" />
+                      <ICONS.EYE className="w-4 h-4" />
                     )}
                   </button>
                 </div>

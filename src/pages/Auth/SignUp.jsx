@@ -1,21 +1,4 @@
 import React, { useState } from "react";
-import {
-  Eye,
-  EyeOff,
-  UserPlus,
-  User,
-  Phone,
-  MapPin,
-  Briefcase,
-  Calendar,
-  IdCard,
-  Banknote,
-  ShieldCheck,
-  Plus,
-  X,
-  Image as ImageIcon,
-  AlertTriangle,
-} from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import {
@@ -40,6 +23,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/services/api";
 import toast from "react-hot-toast";
+import { ICONS } from "@/Icons/icons";
 
 /** Utility: convert File -> base64 string (optional photo upload) */
 const fileToBase64 = (file) =>
@@ -309,7 +293,7 @@ export default function WorkerSignup() {
         <Card className="border border-bajrang-border shadow-card bg-bajrang-surface">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center justify-center text-2xl text-bajrang-text">
-              <UserPlus className="w-6 h-6 mr-2 text-bajrang-brand" />
+              <ICONS.USERPLUS className="w-6 h-6 mr-2 text-bajrang-brand" />
               Worker Signup
             </CardTitle>
             <CardDescription className="text-center text-bajrang-textSecondary">
@@ -334,7 +318,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label htmlFor="fullName">Full Name *</Label>
                       <div className="relative">
-                        <User className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.USER className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           id="fullName"
                           className="pl-10"
@@ -382,7 +366,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label htmlFor="dateOfBirth">Date of Birth *</Label>
                       <div className="relative">
-                        <Calendar className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.CALENDAR className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           id="dateOfBirth"
                           type="date"
@@ -399,7 +383,7 @@ export default function WorkerSignup() {
                       <Label htmlFor="photo">Photo (optional)</Label>
                       <div className="flex items-center gap-3">
                         <label className="inline-flex items-center px-3 py-2 transition border rounded-lg cursor-pointer border-bajrang-border bg-bajrang-surfaceAlt hover:bg-bajrang-hover">
-                          <ImageIcon className="w-4 h-4 mr-2 text-bajrang-muted" />
+                          <ICONS.IMAGE className="w-4 h-4 mr-2 text-bajrang-muted" />
                           <span className="text-sm">Upload</span>
                           <input
                             id="photo"
@@ -565,7 +549,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label>Experience (years) *</Label>
                       <div className="relative">
-                        <Briefcase className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.BRIEFCASE className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           type="number"
                           min="0"
@@ -601,7 +585,7 @@ export default function WorkerSignup() {
                         onClick={addSkill}
                         className="bg-bajrang-brand hover:opacity-90"
                       >
-                        <Plus className="w-4 h-4 mr-1" />
+                        <ICONS.PLUS className="w-4 h-4 mr-1" />
                         Add
                       </Button>
                     </div>
@@ -618,7 +602,7 @@ export default function WorkerSignup() {
                               onClick={() => removeSkill(s)}
                               className="hover:text-bajrang-danger"
                             >
-                              <X className="w-3 h-3" />
+                              <ICONS.X className="w-3 h-3" />
                             </button>
                           </span>
                         ))}
@@ -751,9 +735,9 @@ export default function WorkerSignup() {
                           className="absolute -translate-y-1/2 right-3 top-1/2 text-bajrang-muted hover:text-bajrang-text"
                         >
                           {showPassword ? (
-                            <EyeOff className="w-4 h-4" />
+                            <ICONS.EYEOFF className="w-4 h-4" />
                           ) : (
-                            <Eye className="w-4 h-4" />
+                            <ICONS.EYE className="w-4 h-4" />
                           )}
                         </button>
                       </div>
@@ -777,9 +761,9 @@ export default function WorkerSignup() {
                           className="absolute -translate-y-1/2 right-3 top-1/2 text-bajrang-muted hover:text-bajrang-text"
                         >
                           {showConfirm ? (
-                            <EyeOff className="w-4 h-4" />
+                            <ICONS.EYEOFF className="w-4 h-4" />
                           ) : (
-                            <Eye className="w-4 h-4" />
+                            <ICONS.EYE className="w-4 h-4" />
                           )}
                         </button>
                       </div>
@@ -818,7 +802,7 @@ export default function WorkerSignup() {
                   </div>
 
                   <div className="flex items-center gap-2 p-3 text-sm border rounded-md border-bajrang-border bg-bajrang-surfaceAlt text-bajrang-textSecondary">
-                    <ShieldCheck className="w-4 h-4 text-bajrang-success" />
+                    <ICONS.SHIELDCHECK className="w-4 h-4 text-bajrang-success" />
                     Your information is kept secure and used only for assignment
                     & salary processing.
                   </div>

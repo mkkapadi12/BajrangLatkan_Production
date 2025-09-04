@@ -1,13 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Users,
-  Factory,
-  Target,
-  Award,
-  UserCheck,
-  Settings,
-} from "lucide-react";
+import { aboutData } from "@/constant";
+import { ICONS } from "@/Icons/icons";
 
 const About = () => {
   return (
@@ -49,23 +43,7 @@ const About = () => {
       {/* Mission, Vision, Values */}
       <section className="px-6 py-16 md:px-12 lg:px-20 bg-bajrang-surfaceAlt">
         <div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-3">
-          {[
-            {
-              icon: <Target className="w-10 h-10 text-bajrang-accent" />,
-              title: "Our Mission",
-              desc: "To digitize and simplify latkan manufacturing with transparency, efficiency, and trust.",
-            },
-            {
-              icon: <Factory className="w-10 h-10 text-bajrang-secondary" />,
-              title: "Our Vision",
-              desc: "To be the trusted backbone for workers and families driving the handicraft industry.",
-            },
-            {
-              icon: <Award className="w-10 h-10 text-bajrang-success" />,
-              title: "Our Values",
-              desc: "Integrity, craftsmanship, and innovation that respects tradition and embraces progress.",
-            },
-          ].map((item, idx) => (
+          {aboutData.map((item, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 40 }}
@@ -100,7 +78,7 @@ const About = () => {
               className="p-8 text-left transition border shadow-md bg-bajrang-surface rounded-2xl border-bajrang-border hover:shadow-lg"
             >
               <div className="flex items-center mb-4">
-                <Users className="w-10 h-10 text-bajrang-accent" />
+                <ICONS.USERS className="w-10 h-10 text-bajrang-accent" />
                 <h3 className="ml-3 text-xl font-semibold text-bajrang-text">
                   For Workers
                 </h3>
@@ -122,7 +100,7 @@ const About = () => {
               className="p-8 text-left transition border shadow-md bg-bajrang-surface rounded-2xl border-bajrang-border hover:shadow-lg"
             >
               <div className="flex items-center mb-4">
-                <Settings className="w-10 h-10 text-bajrang-secondary" />
+                <ICONS.SETTINGS className="w-10 h-10 text-bajrang-secondary" />
                 <h3 className="ml-3 text-xl font-semibold text-bajrang-text">
                   For Admin
                 </h3>

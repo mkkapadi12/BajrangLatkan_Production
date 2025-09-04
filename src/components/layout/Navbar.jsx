@@ -89,13 +89,13 @@ export default function Navbar() {
 
                     {/* Menu Items */}
                     <Link to="/profile">
-                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:bg-bajrang-accent/10 hover:text-bajrang-accent">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:!bg-bajrang-accent/10 hover:!text-bajrang-accent">
                         👤 My Profile
                       </MenubarItem>
                     </Link>
 
                     <Link to="/private/stories">
-                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:bg-bajrang-accent/10 hover:text-bajrang-accent">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:!bg-bajrang-accent/10 hover:!text-bajrang-accent">
                         ⚙️ Settings
                       </MenubarItem>
                     </Link>
@@ -103,7 +103,7 @@ export default function Navbar() {
                     <MenubarSeparator className="my-2 border-bajrang-divider" />
 
                     <Link to="/logout">
-                      <MenubarItem className="flex items-center gap-2 px-4 py-2 text-red-500 transition-all rounded-lg cursor-pointer hover:bg-red-100 hover:text-red-600">
+                      <MenubarItem className="flex items-center gap-2 px-4 py-2 text-red-500 transition-all rounded-lg cursor-pointer hover:!bg-red-100 hover:!text-red-600">
                         🚪 Logout
                       </MenubarItem>
                     </Link>
