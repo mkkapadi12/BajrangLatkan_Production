@@ -17,7 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Navbar() {
-  const { isLoggedIn, user } = useAuthContext();
+  const { isLoggedIn, user, token } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -94,9 +94,9 @@ export default function Navbar() {
                       </MenubarItem>
                     </Link>
 
-                    <Link to="/private/stories">
+                    <Link to="/worker/dashboard">
                       <MenubarItem className="flex items-center gap-2 px-4 py-2 transition-all rounded-lg cursor-pointer hover:!bg-bajrang-accent/10 hover:!text-bajrang-accent">
-                        ⚙️ Settings
+                        ⚙️ Dashboard
                       </MenubarItem>
                     </Link>
 

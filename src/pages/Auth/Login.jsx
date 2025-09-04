@@ -66,7 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-start justify-center min-h-screen p-4 mt-10 bg-bajrang-bg">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-bajrang-bg">
       <div className="w-full max-w-md">
         {/* Login Form */}
         <Card className="shadow-lg border-bajrang-border bg-bajrang-card">
