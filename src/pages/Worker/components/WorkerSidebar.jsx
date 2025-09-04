@@ -9,7 +9,7 @@ import {
   LogOut,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { ICONS } from "@/Icons/icons";
