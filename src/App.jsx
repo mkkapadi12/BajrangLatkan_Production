@@ -18,14 +18,24 @@ import { HelpSupport } from "./pages/Worker/components/HelpSupport";
 import AdminLogin from "./pages/Admin/Auth/AdminLogin";
 import AdminLogout from "./pages/Admin/Auth/AdminLogout";
 import AdminSignup from "./pages/Admin/Auth/AdminSignup";
-import AdminWelcome from "./pages/Admin/components/AdminWelcome";
+import AdminWelcome from "./pages/Admin/pages/AdminWelcome";
+import AdminLayout from "./pages/Admin/Layout/AdminLayout";
+import AdminDashboardOverview from "./pages/Admin/pages/AdminDashboardOverview";
+import { WorkersManagement } from "./pages/Admin/pages/WorkersManagement";
+import { AssignWork } from "./pages/Admin/pages/AssignWork";
+import { SalaryManagement } from "./pages/Admin/pages/SalaryManagement";
+import { WorkTracking } from "./pages/Admin/pages/WorkTracking";
+import { ReportsAnalytics } from "./pages/Admin/pages/ReportsAnalytics";
+import { MaterialsManagement } from "./pages/Admin/pages/MaterialsManagement";
+import { NotificationsManagement } from "./pages/Admin/pages/NotificationsManagement";
+import { AdminSettings } from "./pages/Admin/pages/AdminSettings";
 
 const App = () => {
   return (
     <Router>
       <Layout>
         <Routes>
-          {/* Auth pages for worker */}
+          {/* Worker Auth Pages */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/logout" element={<Logout />} />
@@ -51,7 +61,19 @@ const App = () => {
           </Route>
 
           {/* Admin Layout and Routes */}
-          <Route path="/admin" element={<AdminWelcome />} />
+          <Route path="/admin/welcome" element={<AdminWelcome />} />
+
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboardOverview />} />
+            <Route path="workers" element={<WorkersManagement />} />
+            <Route path="assign-work" element={<AssignWork />} />
+            <Route path="work-tracking" element={<WorkTracking />} />
+            <Route path="salary" element={<SalaryManagement />} />
+            <Route path="materials" element={<MaterialsManagement />} />
+            <Route path="notifications" element={<NotificationsManagement />} />
+            <Route path="reports" element={<ReportsAnalytics />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
 
           {/* 404 Not Found */}
           <Route path="*" element={<div>404 Not Found</div>} />

@@ -51,7 +51,7 @@ const AdminProvider = ({ children }) => {
     }
   };
 
-  console.log(admin);
+  console.log("Admin Data :", admin);
 
   useEffect(() => {
     if (token) {

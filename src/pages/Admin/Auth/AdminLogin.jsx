@@ -40,7 +40,7 @@ const AdminLogin = () => {
         const res_data = await response.json();
         if (res_data.msg === "Admin login successful!") {
           storeTokenInLS(res_data.token);
-          router("/admin"); // redirect to admin dashboard
+          router("/admin/welcome"); // redirect to admin dashboard
         } else {
           setError(res_data.msg || "Login failed. Please try again.");
         }

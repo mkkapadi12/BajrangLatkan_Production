@@ -31,7 +31,6 @@ export const ICONS = {
   LOGIN: LogIn,
   LOGOUT: "",
   REGISTER: "",
-  DASHBOARD: "",
   SETTINGS: Settings,
   PROFILE: "",
   HELP: "",
