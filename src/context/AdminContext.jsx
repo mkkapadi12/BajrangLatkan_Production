@@ -3,51 +3,55 @@ import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 // import toast from "react-hot-toast";
 
-const AuthContext = createContext();
-// const BASE_URL = "http://localhost:5000/api/auth"; // Update with your actual base URL if needed
-const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
+const AdminContext = createContext();
+// const BASE_URL = "http://localhost:5000/api/admin"; // Update with your actual base URL if needed
+const BASE_URL =
+  "https://bajrang-latkan-production-server.vercel.app/api/admin";
 
-const AuthProvider = ({ children }) => {
+const AdminProvider = ({ children }) => {
   const [token, setToken] = useState(
-    localStorage.getItem("workertoken") || null
+    localStorage.getItem("adminToken") || null
   );
-  const [user, setUser] = useState(""); // Initialize with null to indicate no user initially
+  const [admin, setAdmin] = useState(""); // Initialize with null to indicate no user initially
+  // const [file, setFile] = useState(null);
   const isLoggedIn = !!token;
 
   const authorizationToken = `Bearer ${token}`;
 
   // Store token in Local Storage and update state
   const storeTokenInLS = (serverToken) => {
-    localStorage.setItem("workertoken", serverToken);
+    localStorage.setItem("adminToken", serverToken);
     setToken(serverToken);
   };
 
   // Logout function
-  const userLogout = () => {
-    localStorage.removeItem("workertoken");
+  const adminLogout = () => {
+    localStorage.removeItem("adminToken");
     setToken(null);
     if (token == null) {
       showLogoutToast();
     }
-    setUser(""); // Clear the user data on logout
+    setAdmin(""); // Clear the user data on logout
   };
 
   // JWT Authentication - Fetch currently logged-in user data
   const userAuthentication = async () => {
     if (!token) return; // Skip if no token is available
     try {
-      const res = await axios.get(`${BASE_URL}/user`, {
+      const res = await axios.get(`${BASE_URL}/auth`, {
         headers: {
           Authorization: authorizationToken,
         },
       });
       const userInfo = res.data;
-      setUser(userInfo.workerData); // Update user state
+      setAdmin(userInfo.adminData); // Update admin state
     } catch (error) {
-      console.error("Can't fetch user data:", error);
-      userLogout(); // Logout if authentication fails
+      console.error("Can't fetch admin data:", error.message);
+      adminLogout(); // Logout if authentication fails
     }
   };
+
+  console.log(admin);
 
   useEffect(() => {
     if (token) {
@@ -57,29 +61,29 @@ const AuthProvider = ({ children }) => {
 
   // Effect to sync token with localStorage
   useEffect(() => {
-    const storedToken = localStorage.getItem("workertoken");
+    const storedToken = localStorage.getItem("adminToken");
     setToken(storedToken);
   }, []);
 
   return (
-    <AuthContext.Provider
+    <AdminContext.Provider
       value={{
         storeTokenInLS,
-        userLogout,
+        adminLogout,
         isLoggedIn,
-        user,
+        admin,
         token,
         authorizationToken,
       }}
     >
       {children}
-    </AuthContext.Provider>
+    </AdminContext.Provider>
   );
 };
 
-// Custom hook to use Auth Context
-const useAuthContext = () => {
-  return useContext(AuthContext);
+// Custom hook to use Admin Context
+const useAdminContext = () => {
+  return useContext(AdminContext);
 };
 
-export { useAuthContext, AuthProvider };
+export { useAdminContext, AdminProvider };

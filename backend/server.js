@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000;
 
 // Import routes
 const auth_route = require("./routes/auth.routes");
+const admin_route = require("./routes/admin.routes");
 const adminMiddleware = require("./middleware/admin-middleware");
 const authMiddleware = require("./middleware/auth-middleware");
 
@@ -48,6 +49,8 @@ app.use(
   adminMiddleware,
   require("./routes/workers")
 );
+
+app.use("/api/admin", admin_route);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

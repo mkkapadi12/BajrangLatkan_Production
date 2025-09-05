@@ -9,6 +9,7 @@ import {
   ImageIcon,
   Lock,
   LogIn,
+  Mail,
   MapPin,
   Menu,
   Phone,
@@ -53,4 +54,7 @@ export const ICONS = {
   X: X,
   IMAGE: ImageIcon,
   ALERTTRIANGLE: AlertTriangle,
+  MAIL: Mail,
+  ADMIN: UserPlus,
+  DASHBOARD: Briefcase,
 };

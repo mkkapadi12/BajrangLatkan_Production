@@ -10,7 +10,10 @@ const Layout = ({ children }) => {
   const hideLayout =
     location.pathname.startsWith("/worker") ||
     location.pathname === "/login" ||
-    location.pathname === "/signup";
+    location.pathname === "/signup" ||
+    location.pathname === "/admin/login" ||
+    location.pathname === "/admin/signup" ||
+    location.pathname.startsWith("/admin");
 
   return (
     <div>

@@ -44,7 +44,7 @@ export const api = {
     const params = new URLSearchParams(filters).toString();
     const response = await fetch(`${BASE_URL}/workers?${params}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("production_worker")}`,
+        Authorization: `Bearer ${localStorage.getItem("workertoken")}`,
       },
     });
     if (!response.ok) throw new Error("Failed to fetch workers");
@@ -105,6 +105,39 @@ export const api = {
   async login(data) {
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      // if (!response.ok) throw new Error("Failed to create user");
+      return response;
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
+
+  async adminSignup(data) {
+    try {
+      console.log("API Data:", data);
+      const response = await fetch(`${BASE_URL}/admin/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      // if (!response.ok) throw new Error("Failed to create user");
+      return response;
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
+
+  async adminLogin(data) {
+    try {
+      const response = await fetch(`${BASE_URL}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
