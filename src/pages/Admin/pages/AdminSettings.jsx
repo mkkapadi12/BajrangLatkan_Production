@@ -26,8 +26,10 @@ import {
   MapPin,
   Globe,
 } from "lucide-react";
+import { useAdminContext } from "@/context/AdminContext";
 
 export function AdminSettings() {
+  const { admin } = useAdminContext();
   const [profileData, setProfileData] = useState({
     name: "Admin User",
     email: "admin@bajranglatkan.com",
@@ -94,27 +96,40 @@ export function AdminSettings() {
         </p>
       </div>
 
+      {/* Tabs Navigation */}
       <Tabs defaultValue="profile" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile" className="flex items-center gap-2">
-            <User className="w-4 h-4" />
-            Profile
-          </TabsTrigger>
-          <TabsTrigger value="business" className="flex items-center gap-2">
-            <Building2 className="w-4 h-4" />
-            Business
-          </TabsTrigger>
-          <TabsTrigger
-            value="notifications"
-            className="flex items-center gap-2"
-          >
-            <Bell className="w-4 h-4" />
-            Notifications
-          </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
-            <Shield className="w-4 h-4" />
-            Security
-          </TabsTrigger>
+          {[
+            {
+              tab: "Profile",
+              value: "profile",
+              icon: User,
+            },
+            {
+              tab: "Business",
+              value: "business",
+              icon: Building2,
+            },
+            {
+              tab: "Notifications",
+              value: "notifications",
+              icon: Bell,
+            },
+            {
+              tab: "Security",
+              value: "security",
+              icon: Shield,
+            },
+          ].map((tabs, index) => (
+            <TabsTrigger
+              key={index}
+              value={tabs.value}
+              className="flex items-center justify-center gap-2 text-sm font-medium md:text-base"
+            >
+              <tabs.icon className="hidden w-4 h-4 md:w-5 md:h-5 text-bajrang-brand md:block" />
+              <span>{tabs.tab}</span>
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         {/* Profile Settings */}
@@ -129,10 +144,16 @@ export function AdminSettings() {
             <CardContent className="space-y-6">
               {/* Profile Picture */}
               <div className="flex items-center gap-6">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage src="/admin-avatar.png" />
-                  <AvatarFallback className="bg-[#7B1E3A] text-white text-xl">
-                    AD
+                <Avatar className="w-16 h-16 sm:w-24 sm:h-24 ring-2 ring-bajrang-accent hover:ring-bajrang-warning">
+                  <AvatarImage
+                    src={admin?.photo || "/placeholder.svg"}
+                    alt={admin?.adminname}
+                  />
+                  <AvatarFallback className="text-lg font-semibold md:text-3xl text-bajrang-brand bg-bajrang-accent/20">
+                    {admin?.adminname
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div>
@@ -152,10 +173,10 @@ export function AdminSettings() {
               {/* Profile Form */}
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="adminname">Full Name</Label>
                   <Input
-                    id="name"
-                    value={profileData.name}
+                    id="adminname"
+                    value={admin?.adminname}
                     onChange={(e) =>
                       setProfileData({ ...profileData, name: e.target.value })
                     }
@@ -169,7 +190,7 @@ export function AdminSettings() {
                       id="email"
                       type="email"
                       className="pl-10"
-                      value={profileData.email}
+                      value={admin?.email}
                       onChange={(e) =>
                         setProfileData({
                           ...profileData,

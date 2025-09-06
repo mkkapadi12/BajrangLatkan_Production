@@ -14,6 +14,7 @@ const AdminProvider = ({ children }) => {
   );
   const [admin, setAdmin] = useState(""); // Initialize with null to indicate no user initially
   // const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const isLoggedIn = !!token;
 
   const authorizationToken = `Bearer ${token}`;
@@ -38,6 +39,7 @@ const AdminProvider = ({ children }) => {
   const userAuthentication = async () => {
     if (!token) return; // Skip if no token is available
     try {
+      setLoading(true);
       const res = await axios.get(`${BASE_URL}/auth`, {
         headers: {
           Authorization: authorizationToken,
@@ -45,6 +47,7 @@ const AdminProvider = ({ children }) => {
       });
       const userInfo = res.data;
       setAdmin(userInfo.adminData); // Update admin state
+      setLoading(false);
     } catch (error) {
       console.error("Can't fetch admin data:", error.message);
       adminLogout(); // Logout if authentication fails
@@ -71,6 +74,7 @@ const AdminProvider = ({ children }) => {
         storeTokenInLS,
         adminLogout,
         isLoggedIn,
+        loading,
         admin,
         token,
         authorizationToken,

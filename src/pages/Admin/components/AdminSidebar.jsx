@@ -29,12 +29,22 @@ export function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
       >
         <div className="flex flex-col h-full">
           {/* Logo Section */}
-          <div className="flex items-center justify-between mb-2">
-            <Link to="/admin" className="flex items-center space-x-2 group">
-              <ICONS.SPARKLES className="w-7 h-7 text-bajrang-accent animate-spin" />
-              <span className="text-base font-bold tracking-wide transition-colors text-bajrang-brand">
-                Bajrang Latkan
-              </span>
+          <div className="flex items-center justify-between">
+            <Link to="/admin" className="block">
+              <div className="flex items-center gap-3 group">
+                {/* Icon */}
+                <ICONS.SPARKLES className="w-7 h-7 text-bajrang-accent animate-spin" />
+
+                {/* Brand Text */}
+                <div className="flex flex-col leading-tight">
+                  <span className="text-base font-bold tracking-wide transition-colors md:text-lg text-bajrang-brand group-hover:text-bajrang-warning">
+                    Bajrang Latkan
+                  </span>
+                  <span className="text-sm font-medium tracking-wide text-gray-500">
+                    Admin Dashboard
+                  </span>
+                </div>
+              </div>
             </Link>
 
             {/* Close button (mobile only) */}
@@ -48,7 +58,7 @@ export function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
             </Button>
           </div>
 
-          <Separator className="my-4" />
+          <Separator className="my-2" />
 
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto">

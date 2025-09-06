@@ -5,10 +5,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { ICONS } from "@/Icons/icons";
 import { useAdminContext } from "@/context/AdminContext";
+import { useLoader } from "@/hooks/useLoader";
 
 export default function AdminWelcome() {
-  const { admin } = useAdminContext();
+  const { admin, loading } = useAdminContext();
   const navigate = useNavigate();
+
+  if (loading) {
+    return useLoader();
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-r from-bajrang-brand/90 to-bajrang-accent/80">

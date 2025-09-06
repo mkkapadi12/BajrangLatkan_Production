@@ -5,8 +5,12 @@ import {
   ClipboardList,
   DollarSign,
   LayoutDashboard,
+  LogOut,
+  Menu,
   Package,
+  Search,
   Settings,
+  User,
   Users,
 } from "lucide-react";
 
@@ -20,4 +24,9 @@ export const ADMINICONS = {
   BELL: Bell,
   BARCHART3: BarChart3,
   SETTINGS: Settings,
+  BELL: Bell,
+  SEARCH: Search,
+  LOGOUT: LogOut,
+  USER: User,
+  MENU: Menu,
 };

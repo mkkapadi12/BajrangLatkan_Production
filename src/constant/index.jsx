@@ -1,10 +1,18 @@
 import { Factory, Target, Award } from "lucide-react";
 
-export const navigation = [
+export const desktopNavigation = [
   { name: "Home", to: "/" },
   { name: "About", to: "/about" },
   { name: "Products", to: "/products" },
   { name: "Contact", to: "/contact" },
+];
+
+export const mobileNavigation = [
+  { name: "Home", to: "/" },
+  { name: "About", to: "/about" },
+  { name: "Products", to: "/products" },
+  { name: "Contact", to: "/contact" },
+  { name: "Dashboard", to: "/worker/dashboard" },
 ];
 
 //About.jsx content

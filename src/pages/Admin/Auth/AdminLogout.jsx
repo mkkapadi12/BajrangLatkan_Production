@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAdminContext } from "@/context/AdminContext";
+import { Navigate } from "react-router-dom";
 
 const AdminLogout = () => {
-  return (
-    <div>
-      <h1>Admin Logout</h1>
-      <p>You have been logged out successfully.</p>
-    </div>
-  );
+  const { adminLogout } = useAdminContext();
+
+  useEffect(() => {
+    adminLogout(); // Call the logout function
+  }, [adminLogout]);
+
+  return <Navigate to="/admin/login" />;
 };
 
 export default AdminLogout;

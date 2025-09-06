@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
-import { navigation } from "@/constant";
+import { desktopNavigation, mobileNavigation } from "@/constant";
 import { ICONS } from "@/Icons/icons";
 import { Button } from "@/components/ui/Button";
 import { showUserToast } from "@/Toast/customToast";
@@ -45,7 +45,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="items-center hidden space-x-8 md:flex">
-            {navigation.map((item) => (
+            {desktopNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.to}
@@ -159,7 +159,7 @@ export default function Navbar() {
 
               {/* Navigation Links */}
               <div className="flex flex-col space-y-5">
-                {navigation.map((item) => (
+                {mobileNavigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.to}
