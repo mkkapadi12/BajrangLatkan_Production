@@ -305,7 +305,7 @@ export default function WorkerSignup() {
             {error && (
               <Alert className="mb-4 border-bajrang-danger bg-red-50">
                 <AlertDescription className="flex items-center gap-2 text-bajrang-danger">
-                  <AlertTriangle className="w-4 h-4" /> {error}
+                  <ICONS.ALERTTRIANGLE className="w-4 h-4" /> {error}
                 </AlertDescription>
               </Alert>
             )}
@@ -413,7 +413,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number *</Label>
                       <div className="relative">
-                        <Phone className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.PHONE className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           id="phone"
                           type="tel"
@@ -445,7 +445,7 @@ export default function WorkerSignup() {
                     <Label>Address *</Label>
                     <div className="grid gap-4 md:grid-cols-3">
                       <div className="relative">
-                        <MapPin className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.MAPPIN className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           className="pl-10"
                           placeholder="Village"
@@ -674,7 +674,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label>UPI ID (optional)</Label>
                       <div className="relative">
-                        <Banknote className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.BANKNOTE className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           className="pl-10"
                           placeholder="name@upi"
@@ -705,7 +705,7 @@ export default function WorkerSignup() {
                     <div className="space-y-2">
                       <Label>email</Label>
                       <div className="relative">
-                        <IdCard className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
+                        <ICONS.IDCARD className="absolute w-4 h-4 -translate-y-1/2 text-bajrang-muted left-3 top-1/2" />
                         <Input
                           className="pl-10"
                           placeholder="If empty, we’ll use your phone"

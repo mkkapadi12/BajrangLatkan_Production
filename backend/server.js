@@ -9,8 +9,7 @@ const port = process.env.PORT || 5000;
 // Import routes
 const auth_route = require("./routes/auth.routes");
 const admin_route = require("./routes/admin.routes");
-const adminMiddleware = require("./middleware/admin-middleware");
-const authMiddleware = require("./middleware/auth-middleware");
+const work_route = require("./routes/work.routes");
 
 app.use(
   cors({
@@ -41,16 +40,15 @@ connection.once("open", () => {
 app.get("/api", (req, res) => {
   res.send("Welcome to Bajrang Latkan API");
 });
-app.use("/api/auth", auth_route);
-app.use("/api/products", require("./routes/products"));
-app.use(
-  "/api/workers",
-  authMiddleware,
-  adminMiddleware,
-  require("./routes/workers")
-);
 
+//Auth Routes
+app.use("/api/auth", auth_route);
+
+//Admin Routes
 app.use("/api/admin", admin_route);
+
+//Work Routes
+app.use("/api/work", work_route);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
