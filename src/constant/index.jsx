@@ -12,7 +12,6 @@ export const mobileNavigation = [
   { name: "About", to: "/about" },
   { name: "Products", to: "/products" },
   { name: "Contact", to: "/contact" },
-  { name: "Dashboard", to: "/worker/dashboard" },
 ];
 
 //About.jsx content

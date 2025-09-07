@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { api } from "@/services/api";
 import {
   Select,
@@ -17,6 +17,8 @@ import {
 import { getStatusColor } from "@/hooks/useStatusColor";
 import { useLoader } from "@/hooks/useLoader";
 import { Separator } from "@/components/ui/separator";
+import EditSaveCancel from "@/hooks/useEditSaveCancel";
+import { ADMINICONS } from "@/Icons/AdminIcons";
 
 export function WorkerDetails() {
   const { id } = useParams();
@@ -24,6 +26,7 @@ export function WorkerDetails() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedWorker, setEditedWorker] = useState(worker);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWorker = async () => {
@@ -41,14 +44,6 @@ export function WorkerDetails() {
     };
     fetchWorker();
   }, [id]);
-
-  // if (!worker) {
-  //   return (
-  //     <div className="flex items-center justify-center h-64">
-  //       <p className="text-[#475569]">Worker not found</p>
-  //     </div>
-  //   );
-  // }
 
   const handleSave = () => {
     console.log("Updated Worker:", editedWorker);
@@ -81,36 +76,67 @@ export function WorkerDetails() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <h1 className="text-2xl font-bold">Worker Details</h1>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          {/* Direct Links */}
-          <Button variant="outline">Assign Work</Button>
-          <Button variant="outline">Check Salary Status</Button>
-
-          {/* Edit / Save + Cancel */}
-          {!isEditing ? (
-            <Button onClick={() => setIsEditing(true)}>Edit</Button>
-          ) : (
-            <div className="flex gap-2">
-              <Button
-                onClick={handleSave}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                Save
-              </Button>
-              <Button variant="destructive" onClick={() => setIsEditing(false)}>
-                Cancel
-              </Button>
-            </div>
-          )}
+        <div className="flex items-center justify-between w-full">
+          <h1 className="text-2xl font-bold">Worker Details</h1>
+          <Button
+            variant="outline"
+            className="sm:hidden"
+            onClick={() => navigate(-1)}
+          >
+            <span>
+              <ADMINICONS.LEFTARROW />
+            </span>{" "}
+            Back
+          </Button>
+        </div>
+        <div>
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            {/* Edit / Save + Cancel */}
+            {!isEditing ? (
+              <div className="hidden gap-2 sm:flex">
+                <Button variant="outline" onClick={() => navigate(-1)}>
+                  <span>
+                    <ADMINICONS.LEFTARROW />
+                  </span>{" "}
+                  Back
+                </Button>
+                <Button
+                  variant="outline"
+                  className="hover:bg-bajrang-accent"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </Button>
+              </div>
+            ) : (
+              <div className="hidden gap-2 sm:flex ">
+                <Button
+                  onClick={handleSave}
+                  className="bg-green-500 hover:bg-green-700"
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={() => setIsEditing(false)}
+                  className="bg-red-500 hover:bg-red-700"
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Personal Information */}
-        <Card className="border-l-4 border-bajrang-brand">
+        <Card className="relative border-l-4 border-bajrang-brand">
+          <EditSaveCancel
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            handleSave={handleSave}
+          />
           <CardHeader>
             <CardTitle className="text-lg text-bajrang-brand">
               Personal Information
@@ -166,7 +192,12 @@ export function WorkerDetails() {
         </Card>
 
         {/* Contact Information */}
-        <Card className="border-l-4 border-bajrang-secondary">
+        <Card className="relative border-l-4 border-bajrang-secondary">
+          <EditSaveCancel
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            handleSave={handleSave}
+          />
           <CardHeader>
             <CardTitle className="text-lg text-bajrang-brand">
               Contact Information
@@ -256,7 +287,12 @@ export function WorkerDetails() {
         </Card>
 
         {/* Work & Skills */}
-        <Card className="border-l-4 border-bajrang-secondary">
+        <Card className="relative border-l-4 border-bajrang-secondary">
+          <EditSaveCancel
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            handleSave={handleSave}
+          />
           <CardHeader>
             <CardTitle className="text-lg text-bajrang-brand">
               Work & Skills
@@ -306,7 +342,12 @@ export function WorkerDetails() {
         </Card>
 
         {/* Bank Details */}
-        <Card className="border-l-4 border-bajrang-brand">
+        <Card className="relative border-l-4 border-bajrang-brand">
+          <EditSaveCancel
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            handleSave={handleSave}
+          />
           <CardHeader>
             <CardTitle className="text-lg text-bajrang-brand">
               Bank Details

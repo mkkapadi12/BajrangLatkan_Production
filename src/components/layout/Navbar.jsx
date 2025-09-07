@@ -176,17 +176,28 @@ export default function Navbar() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col mt-10 space-y-4">
+              <div className="flex flex-col mt-3 space-y-4">
                 {isLoggedIn ? (
-                  <Link to="/logout">
-                    <Button
-                      variant="outline"
-                      className="w-full font-semibold transition-all duration-300 rounded-lg border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Logout
-                    </Button>
-                  </Link>
+                  <div className="flex flex-col mt-12 space-y-4">
+                    <Link to="/worker/dashboard">
+                      <Button
+                        variant="outline"
+                        className="w-full font-semibold transition-all duration-300 rounded-lg border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Link to="/logout">
+                      <Button
+                        variant="outline"
+                        className="w-full font-semibold transition-all duration-300 rounded-lg border-bajrang-brand text-bajrang-brand hover:bg-bajrang-brand hover:text-white"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Logout
+                      </Button>
+                    </Link>
+                  </div>
                 ) : (
                   <Link to="/login">
                     <Button

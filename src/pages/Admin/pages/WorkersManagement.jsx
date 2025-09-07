@@ -72,7 +72,7 @@ export function WorkersManagement() {
   };
 
   const handleViewDetails = (id) => {
-    console.log("Id : ", id);
+    // console.log("Id : ", id);
     navigate(`/admin/workers/${id}`);
   };
 

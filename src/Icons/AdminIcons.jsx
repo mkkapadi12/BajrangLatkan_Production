@@ -10,18 +10,22 @@ import {
   Edit,
   Eye,
   Filter,
+  IndianRupee,
   LayoutDashboard,
   LogOut,
   MapPin,
   Menu,
   MoreHorizontal,
+  MoveLeft,
   Package,
   Phone,
+  SaveAll,
   Search,
   Settings,
   Trash2,
   User,
   Users,
+  X,
 } from "lucide-react";
 
 export const ADMINICONS = {
@@ -48,4 +52,8 @@ export const ADMINICONS = {
   PHONE: Phone,
   CHECKCIRCLE: CheckCircle,
   MOREHORIZONTAL: MoreHorizontal,
+  SAVE: SaveAll,
+  CANCEL: X,
+  LEFTARROW: MoveLeft,
+  INDIANRUPEE: IndianRupee,
 };
