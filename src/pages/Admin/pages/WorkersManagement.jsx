@@ -30,9 +30,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import { useLoader } from "@/hooks/useLoader";
 
 export function WorkersManagement() {
   const [workers, setWorkers] = useState([]);

@@ -34,7 +34,6 @@ export const ADMINICONS = {
   BELL: Bell,
   BARCHART3: BarChart3,
   SETTINGS: Settings,
-  BELL: Bell,
   SEARCH: Search,
   LOGOUT: LogOut,
   USER: User,
