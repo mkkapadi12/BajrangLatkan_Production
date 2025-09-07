@@ -10,6 +10,7 @@ const port = process.env.PORT || 5000;
 const auth_route = require("./routes/auth.routes");
 const admin_route = require("./routes/admin.routes");
 const work_route = require("./routes/work.routes");
+const workers_route = require("./routes/workers.routes");
 
 app.use(
   cors({
@@ -49,6 +50,8 @@ app.use("/api/admin", admin_route);
 
 //Work Routes
 app.use("/api/work", work_route);
+
+app.use("/api/workers", workers_route);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

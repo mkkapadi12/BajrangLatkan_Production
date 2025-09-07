@@ -39,20 +39,52 @@ export const api = {
     return response.json();
   },
 
-  // Workers
-  async getWorkers(filters) {
-    const params = new URLSearchParams(filters).toString();
-    const response = await fetch(`${BASE_URL}/workers?${params}`, {
+  // services/workerService.js
+  async getAllWorkers({
+    name,
+    village,
+    gender,
+    status,
+    phone,
+    sortBy,
+    page = 1,
+    limit = 10,
+  }) {
+    const params = new URLSearchParams({
+      ...(name && { name }),
+      ...(village && { village }),
+      ...(phone && { phone }),
+      ...(gender !== "all" && { gender }),
+      ...(status !== "all" && { status }),
+    }).toString();
+
+    const response = await fetch(`${BASE_URL}/workers/getAll?${params}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("workertoken")}`,
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
       },
     });
+
     if (!response.ok) throw new Error("Failed to fetch workers");
-    return response.json();
+    const workersData = await response.json();
+    // console.log("Fetched Workers:", workersData);
+    return workersData;
+  },
+
+  async getworkerdetails(id) {
+    const response = await fetch(`${BASE_URL}/workers/getworker/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch worker details");
+    const workerDetails = await response.json();
+    console.log("Fetched Worker Details:", workerDetails);
+    return workerDetails;
   },
 
   async getWorker(id) {
-    const response = await fetch(`${BASE_URL}/workers/${id}`);
+    const response = await fetch(`${BASE_URL}/getworker/${id}`);
     if (!response.ok) throw new Error("Failed to fetch worker");
     return response.json();
   },

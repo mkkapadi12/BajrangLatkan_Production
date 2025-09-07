@@ -1,4 +1,5 @@
 const ADMIN = require("../models/admin.model.js");
+const WORKER = require("../models/user.model.js");
 
 // Admin Home Controller
 const getAdminHome = (req, res) => {
@@ -87,4 +88,9 @@ const adminAuth = async (req, res) => {
   }
 };
 
-module.exports = { registerAdmin, getAdminHome, loginAdmin, adminAuth };
+module.exports = {
+  registerAdmin,
+  getAdminHome,
+  loginAdmin,
+  adminAuth,
+};

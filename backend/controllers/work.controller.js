@@ -1,6 +1,6 @@
 const WORK = require("../models/work.model");
 const SALARY = require("../models/salary.model");
-// const WORKER = require("../models/user.model");
+const WORKER = require("../models/user.model");
 
 const workHome = async (req, res) => {
   res.status(200).send("Welcome Work Route !!");

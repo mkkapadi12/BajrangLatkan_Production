@@ -28,7 +28,7 @@ const Workers = () => {
 
   const fetchWorkers = async () => {
     try {
-      const data = await api.getWorkers(filters);
+      const data = await api.getAllWorkers(filters);
       setWorkers(data);
     } catch (error) {
       console.error("Error fetching workers:", error);

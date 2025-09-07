@@ -29,6 +29,7 @@ import { ReportsAnalytics } from "./pages/Admin/pages/ReportsAnalytics";
 import { MaterialsManagement } from "./pages/Admin/pages/MaterialsManagement";
 import { NotificationsManagement } from "./pages/Admin/pages/NotificationsManagement";
 import { AdminSettings } from "./pages/Admin/pages/AdminSettings";
+import { WorkerDetails } from "./pages/Admin/pages/WorkerDetails";
 
 const App = () => {
   return (
@@ -66,6 +67,8 @@ const App = () => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboardOverview />} />
             <Route path="workers" element={<WorkersManagement />} />
+            {/* sub pages */}
+            <Route path="workers/:id" element={<WorkerDetails />} />
             <Route path="assign-work" element={<AssignWork />} />
             <Route path="work-tracking" element={<WorkTracking />} />
             <Route path="salary" element={<SalaryManagement />} />
