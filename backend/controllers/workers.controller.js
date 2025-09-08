@@ -110,8 +110,21 @@ const getWorkerById = async (req, res) => {
   }
 };
 
+//get workers
+
+const getWorkers = async (req, res) => {
+  try {
+    const workers = await WORKER.find();
+    res.status(200).json({ msg: "Workers fetched successfully", workers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   getAllWorkers,
   workersHome,
   getWorkerById,
+  getWorkers,
 };

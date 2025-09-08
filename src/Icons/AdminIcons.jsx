@@ -5,6 +5,7 @@ import {
   Bell,
   Calendar,
   CheckCircle,
+  CheckSquare,
   ClipboardList,
   DollarSign,
   Edit,
@@ -56,4 +57,5 @@ export const ADMINICONS = {
   CANCEL: X,
   LEFTARROW: MoveLeft,
   INDIANRUPEE: IndianRupee,
+  CHECKSQUARE: CheckSquare,
 };

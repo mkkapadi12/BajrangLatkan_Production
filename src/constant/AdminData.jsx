@@ -17,6 +17,11 @@ export const sidebarItems = [
     icon: ADMINICONS.CLIPBOARDLIST,
   },
   {
+    title: "Submit Work",
+    href: "/admin/submit-work",
+    icon: ADMINICONS.CHECKSQUARE,
+  },
+  {
     title: "Work Tracking",
     href: "/admin/work-tracking",
     icon: ADMINICONS.ACTIVITY,

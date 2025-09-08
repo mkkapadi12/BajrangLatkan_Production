@@ -33,3 +33,13 @@ export const aboutData = [
     desc: "Integrity, craftsmanship, and innovation that respects tradition and embraces progress.",
   },
 ];
+
+//Work data
+
+export const products = [
+  { id: "1", name: "Hodi Latkan", rate: 7, unit: "packet" },
+  { id: "2", name: "Fancy Latkan", rate: 10, unit: "packet" },
+  { id: "3", name: "Spring Latkan", rate: 6, unit: "packet" },
+  { id: "4", name: "Shivling Latkan", rate: 10, unit: "packet" },
+  { id: "5", name: "Thingali Latkan", rate: 35, unit: "packet" },
+];
