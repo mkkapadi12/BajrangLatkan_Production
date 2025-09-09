@@ -19,28 +19,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  CalendarIcon,
-  Plus,
-  Trash2,
-  Save,
-  User,
-  Package,
-  Calculator,
-} from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useWorkerContext } from "@/context/WorkerContext";
+import { useWorkContext } from "@/context/WorkContext";
 import { useLoader } from "@/hooks/useLoader";
 import toast from "react-hot-toast";
 import { products } from "@/constant";
+import { ADMINICONS } from "@/Icons/AdminIcons";
 
 export function SubmitWork() {
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workDate, setWorkDate] = useState(new Date());
   const [workItems, setWorkItems] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { workers, fetchWorkers, loading, adddailyWork } = useWorkerContext();
+  const { workers, fetchWorkers, adddailyWork, token } = useWorkContext();
 
   const addWorkItem = () => {
     const newItem = {
@@ -101,7 +93,7 @@ export function SubmitWork() {
       workItems.length === 0 ||
       workItems.some((item) => !item.productId || item.packets <= 0)
     ) {
-      toast.info(
+      toast.error(
         "Please select a worker and add at least one work item and add valid quantities."
       );
       return;
@@ -128,13 +120,11 @@ export function SubmitWork() {
 
   const selectedWorkerData = workers.find((w) => w._id === selectedWorker);
 
+  console.log("Workers:", workers);
+  
   useEffect(() => {
     fetchWorkers();
   }, []);
-
-  if (loading) {
-    return useLoader();
-  }
 
   return (
     <div className="space-y-6">
@@ -144,7 +134,7 @@ export function SubmitWork() {
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#7B1E3A]/10 rounded-lg">
-                <User className="h-5 w-5 text-[#7B1E3A]" />
+                <ADMINICONS.USER className="h-5 w-5 text-[#7B1E3A]" />
               </div>
               <div>
                 <p className="text-sm text-[#475569]">Selected Worker</p>
@@ -160,7 +150,7 @@ export function SubmitWork() {
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#EFB700]/10 rounded-lg">
-                <Package className="h-5 w-5 text-[#EFB700]" />
+                <ADMINICONS.PACKAGE className="h-5 w-5 text-[#EFB700]" />
               </div>
               <div>
                 <p className="text-sm text-[#475569]">Total Items</p>
@@ -176,7 +166,7 @@ export function SubmitWork() {
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#005B96]/10 rounded-lg">
-                <Calculator className="h-5 w-5 text-[#005B96]" />
+                <ADMINICONS.CALCULATOR className="h-5 w-5 text-[#005B96]" />
               </div>
               <div>
                 <p className="text-sm text-[#475569]">Total Amount</p>
@@ -231,7 +221,7 @@ export function SubmitWork() {
                       !workDate && "text-muted-foreground"
                     )}
                   >
-                    <CalendarIcon className="w-4 h-4 mr-2" />
+                    <ADMINICONS.CALENDAR className="w-4 h-4 mr-2" />
                     {workDate ? (
                       format(workDate, "PPP")
                     ) : (
@@ -284,14 +274,14 @@ export function SubmitWork() {
                 size="sm"
                 className="bg-[#7B1E3A] hover:bg-[#7B1E3A]/90"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <ADMINICONS.PLUS className="w-4 h-4 mr-2" />
                 Add Item
               </Button>
             </div>
 
             {workItems.length === 0 ? (
               <div className="text-center py-8 text-[#475569]">
-                <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <ADMINICONS.PACKAGE className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No work items added yet. Click "Add Item" to start.</p>
               </div>
             ) : (
@@ -309,7 +299,7 @@ export function SubmitWork() {
                           onClick={() => removeWorkItem(item.id)}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <ADMINICONS.TRASH className="w-4 h-4" />
                         </Button>
                       </div>
 
@@ -374,23 +364,6 @@ export function SubmitWork() {
                             min="0"
                           />
                         </div>
-
-                        {/* <div className="space-y-2">
-                          <Label>Packets</Label>
-                          <Input
-                            type="number"
-                            value={item.packets}
-                            onChange={(e) =>
-                              updateWorkItem(
-                                item.id,
-                                "packets",
-                                Number.parseInt(e.target.value) || 0
-                              )
-                            }
-                            placeholder="0"
-                            min="0"
-                          />
-                        </div> */}
                       </div>
 
                       <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2">
@@ -458,7 +431,7 @@ export function SubmitWork() {
                   className="w-full bg-[#7B1E3A] hover:bg-[#7B1E3A]/90"
                   size="lg"
                 >
-                  <Save className="w-4 h-4 mr-2" />
+                  <ADMINICONS.SAVE className="w-4 h-4 mr-2" />
                   {isSubmitting ? "Submitting Work..." : "Submit Daily Work"}
                 </Button>
               </div>

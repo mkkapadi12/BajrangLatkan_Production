@@ -1,5 +1,5 @@
 const ADMIN = require("../models/admin.model.js");
-const WORKER = require("../models/user.model.js");
+const WORKER = require("../models/worker.model.js");
 
 // Admin Home Controller
 const getAdminHome = (req, res) => {

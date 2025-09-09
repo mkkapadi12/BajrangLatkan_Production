@@ -1,4 +1,4 @@
-const WORKER = require("../models/user.model.js");
+const WORKER = require("../models/worker.model.js");
 //Home Auth route Controller :
 const home = (req, res) => {
   res.status(201).send("Hello Auth Route !");

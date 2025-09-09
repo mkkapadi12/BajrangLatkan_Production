@@ -1,6 +1,6 @@
 const WORK = require("../models/work.model");
 const SALARY = require("../models/salary.model");
-const WORKER = require("../models/user.model");
+const WORKER = require("../models/worker.model");
 
 const workHome = async (req, res) => {
   res.status(200).send("Welcome Work Route !!");
@@ -137,4 +137,33 @@ const addDailyWork = async (req, res) => {
   }
 };
 
-module.exports = { addDailyWork, workHome };
+//get monthly work of each workers
+
+const monthlyWork = async (req, res) => {
+  try {
+    const { workerId, monthYear } = req.query;
+
+    // Find the work document for the specified worker and month
+    const work = await WORK.findOne({
+      worker: workerId,
+      month: monthYear,
+    }).populate("worker"); // <-- Populate worker reference
+
+    if (!work) {
+      return res.status(404).json({ msg: "No work found for this month" });
+    }
+
+    res.status(200).json({
+      msg: "Monthly work retrieved successfully",
+      month: work.month,
+      workData: {
+        [work.month]: work,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
+module.exports = { addDailyWork, workHome, monthlyWork };

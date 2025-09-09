@@ -31,6 +31,7 @@ import { NotificationsManagement } from "./pages/Admin/pages/NotificationsManage
 import { AdminSettings } from "./pages/Admin/pages/AdminSettings";
 import { WorkerDetails } from "./pages/Admin/pages/WorkerDetails";
 import { SubmitWork } from "./pages/Admin/pages/SubmitWork";
+import MonthlyWorkDetails from "./pages/Admin/pages/MonthlyWorkDetails";
 
 const App = () => {
   return (
@@ -73,6 +74,8 @@ const App = () => {
             <Route path="assign-work" element={<AssignWork />} />
             <Route path="submit-work" element={<SubmitWork />} />
             <Route path="work-tracking" element={<WorkTracking />} />
+            {/* sub pages */}
+            <Route path="work-tracking/:id" element={<MonthlyWorkDetails />} />
             <Route path="salary" element={<SalaryManagement />} />
             <Route path="materials" element={<MaterialsManagement />} />
             <Route path="notifications" element={<NotificationsManagement />} />

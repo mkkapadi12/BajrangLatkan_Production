@@ -39,7 +39,7 @@ const AdminSignup = () => {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log(formData);
+      // console.log(formData);
 
       const response = await api.adminSignup(formData);
 

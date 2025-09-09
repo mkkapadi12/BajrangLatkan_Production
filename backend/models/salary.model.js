@@ -11,13 +11,18 @@ const monthEntrySchema = new mongoose.Schema({
     },
   ],
   totalEarnings: { type: Number, default: 0 }, // sum of all products
+  status: {
+    type: String,
+    enum: ["Pending", "Paid"],
+    default: "Pending",
+  },
 });
 
 const salarySchema = new mongoose.Schema(
   {
     worker: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Worker",
+      ref: "Workers",
       required: true,
     },
     months: [monthEntrySchema], // full salary history

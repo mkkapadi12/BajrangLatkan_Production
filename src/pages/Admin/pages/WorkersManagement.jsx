@@ -80,7 +80,7 @@ export function WorkersManagement() {
     fetchWorkers();
   }, [name, village, gender, phone, status]);
 
-  console.log("workers :", workers);
+  // console.log("workers :", workers);
 
   return (
     <div className="space-y-6">

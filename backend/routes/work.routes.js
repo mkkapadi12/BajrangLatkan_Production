@@ -9,4 +9,6 @@ router.get("/", workController.workHome);
 
 router.post("/adddailywork", adminMiddleware, workController.addDailyWork);
 
+router.get("/monthly", adminMiddleware, workController.monthlyWork);
+
 module.exports = router;

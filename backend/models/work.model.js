@@ -4,7 +4,7 @@ const workSchema = new mongoose.Schema(
   {
     worker: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Worker",
+      ref: "Workers",
       required: true,
     },
     month: { type: String, required: true }, // e.g., "September-2025"

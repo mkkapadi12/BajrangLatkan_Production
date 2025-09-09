@@ -195,8 +195,6 @@ export default function WorkerSignup() {
         photo: photoBase64 || formData.photo || "",
       };
 
-      console.log("worker data :", payload);
-
       // 🔧 Adjust to your API method if different
       const res = await api.createUser(payload);
 

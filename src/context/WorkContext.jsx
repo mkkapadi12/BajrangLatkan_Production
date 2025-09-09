@@ -2,11 +2,11 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const WorkerContext = createContext();
+const WorkContext = createContext();
 // const BASE_URL = "http://localhost:5000/api"; // Update with your actual base URL if needed
 const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
 
-const WorkerProvider = ({ children }) => {
+const WorkProvider = ({ children }) => {
   const [token, setToken] = useState(
     localStorage.getItem("adminToken") || null
   );
@@ -15,25 +15,25 @@ const WorkerProvider = ({ children }) => {
 
   const authorizationToken = `Bearer ${token}`;
 
+  //get all workers
   const fetchWorkers = async () => {
     if (!token) return; // Skip if no token is available
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await axios.get(`${BASE_URL}/workers/getworkers`, {
         headers: {
           Authorization: authorizationToken,
         },
       });
-      //   console.log("Fetched Workers:", response.data);
+      // console.log("Fetched Workers:", response.data);
       setWorkers(response.data.workers);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching workers:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
+  //add daily work of each worker
   const adddailyWork = async ({ workerId, date, products }) => {
     if (!token) return;
 
@@ -61,6 +61,30 @@ const WorkerProvider = ({ children }) => {
     }
   };
 
+  // get monthly work of each worker
+  const getMonthlyWork = async (workerId, monthYear) => {
+    if (!token) return;
+    try {
+      const response = await axios.get(`${BASE_URL}/work/monthly`, {
+        params: {
+          workerId,
+          monthYear, // e.g., "2025-09"
+        },
+        headers: {
+          Authorization: authorizationToken,
+        },
+      });
+      // console.log("Monthly Work:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching monthly work:",
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (token) {
       fetchWorkers();
@@ -74,17 +98,25 @@ const WorkerProvider = ({ children }) => {
   }, []);
 
   return (
-    <WorkerContext.Provider
-      value={{ workers, fetchWorkers, loading, adddailyWork }}
+    <WorkContext.Provider
+      value={{
+        workers,
+        fetchWorkers,
+        loading,
+        adddailyWork,
+        setLoading,
+        getMonthlyWork,
+        token,
+      }}
     >
       {children}
-    </WorkerContext.Provider>
+    </WorkContext.Provider>
   );
 };
 
 // Custom hook to use Admin Context
-const useWorkerContext = () => {
-  return useContext(WorkerContext);
+const useWorkContext = () => {
+  return useContext(WorkContext);
 };
 
-export { useWorkerContext, WorkerProvider };
+export { useWorkContext, WorkProvider };

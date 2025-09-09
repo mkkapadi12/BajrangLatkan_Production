@@ -1,4 +1,4 @@
-const WORKER = require("../models/user.model");
+const WORKER = require("../models/worker.model");
 
 //get Workers Home
 

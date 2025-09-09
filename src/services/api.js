@@ -66,7 +66,6 @@ export const api = {
 
     if (!response.ok) throw new Error("Failed to fetch workers");
     const workersData = await response.json();
-    // console.log("Fetched Workers:", workersData);
     return workersData;
   },
 
@@ -79,7 +78,6 @@ export const api = {
 
     if (!response.ok) throw new Error("Failed to fetch worker details");
     const workerDetails = await response.json();
-    console.log("Fetched Worker Details:", workerDetails);
     return workerDetails;
   },
 
@@ -152,7 +150,6 @@ export const api = {
 
   async adminSignup(data) {
     try {
-      console.log("API Data:", data);
       const response = await fetch(`${BASE_URL}/admin/signup`, {
         method: "POST",
         headers: {
