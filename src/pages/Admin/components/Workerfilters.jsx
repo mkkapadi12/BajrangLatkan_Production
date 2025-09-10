@@ -62,7 +62,11 @@ export const Workerfilters = ({
           </SelectTrigger>
           <SelectContent>
             {statusItem?.map((item) => {
-              return <SelectItem value={item.value}>{item.label}</SelectItem>;
+              return (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              );
             })}
           </SelectContent>
         </Select>

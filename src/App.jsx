@@ -32,6 +32,7 @@ import { AdminSettings } from "./pages/Admin/pages/AdminSettings";
 import { WorkerDetails } from "./pages/Admin/pages/WorkerDetails";
 import { SubmitWork } from "./pages/Admin/pages/SubmitWork";
 import MonthlyWorkDetails from "./pages/Admin/pages/MonthlyWorkDetails";
+import SalaryDetails from "./pages/Admin/pages/SalaryDetails";
 
 const App = () => {
   return (
@@ -77,6 +78,8 @@ const App = () => {
             {/* sub pages */}
             <Route path="work-tracking/:id" element={<MonthlyWorkDetails />} />
             <Route path="salary" element={<SalaryManagement />} />
+            {/* sub pages */}
+            <Route path="salary/:id" element={<SalaryDetails />} />
             <Route path="materials" element={<MaterialsManagement />} />
             <Route path="notifications" element={<NotificationsManagement />} />
             <Route path="reports" element={<ReportsAnalytics />} />

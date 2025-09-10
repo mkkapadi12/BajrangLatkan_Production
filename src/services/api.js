@@ -205,6 +205,7 @@ export const api = {
     });
     if (!response.ok)
       throw new Error("Failed to fetch salary details for worker");
-    return response.json();
+    const salaryDetails = await response.json();
+    return salaryDetails;
   },
 };

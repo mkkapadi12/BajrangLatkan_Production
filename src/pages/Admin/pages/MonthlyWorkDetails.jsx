@@ -105,7 +105,7 @@ function MonthlyWorkDetails() {
     if (id) {
       fetchWorkDetails(id, selectedMonth);
     }
-  }, [id, selectedMonth]);
+  }, [id, selectedMonth, loading]);
 
   if (loading) {
     return <Loader text="Loading work details..." />;

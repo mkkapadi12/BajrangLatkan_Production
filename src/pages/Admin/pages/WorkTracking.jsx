@@ -24,6 +24,7 @@ import { ADMINICONS } from "@/Icons/AdminIcons";
 import { getStatusColor } from "@/hooks/useStatusColor";
 import { useNavigate } from "react-router-dom";
 import { Workerfilters } from "../components/Workerfilters";
+import { workerstatusItem } from "@/constant";
 
 export function WorkTracking() {
   const [workers, setWorkers] = useState([]);
@@ -148,6 +149,7 @@ export function WorkTracking() {
         setPhone={setPhone}
         status={status}
         setStatus={setStatus}
+        statusItem={workerstatusItem}
       />
 
       {/* Table */}
