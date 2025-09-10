@@ -38,6 +38,10 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
 
+app.get("/", (req, res) => {
+  res.send("Bajrang Latkan API is running");
+});
+
 // Routes
 app.get("/api", (req, res) => {
   res.send("Welcome to Bajrang Latkan API");
