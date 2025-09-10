@@ -167,7 +167,7 @@ function MonthlyWorkDetails() {
                   </h3>
                   <p className="text-[#475569] flex items-center gap-1 mt-1">
                     <MapPin className="w-4 h-4" />
-                    Worker ID: {currentWorkData?.worker._id}
+                    Worker ID: {currentWorkData?.worker?.workerId}
                   </p>
                 </div>
                 <div className="sm:text-right">

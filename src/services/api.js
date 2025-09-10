@@ -39,7 +39,6 @@ export const api = {
     return response.json();
   },
 
-  // services/workerService.js
   async getAllWorkers({
     name,
     village,
@@ -178,5 +177,34 @@ export const api = {
     } catch (error) {
       console.error(error.message);
     }
+  },
+
+  //Salary Services
+
+  // 1. get all worker salary details
+  async getSalaryDetails() {
+    const response = await fetch(`${BASE_URL}/salary/salarydetails`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch salary details");
+
+    const salarydetails = await response.json(); // ✅ FIX
+    // console.log("salaries :", salarydetails);
+    return salarydetails;
+  },
+
+  // 2. get particular worker salary details
+  async getSalaryDetailsByWorker(workerId) {
+    const response = await fetch(`${BASE_URL}/salary/worker/${workerId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+      },
+    });
+    if (!response.ok)
+      throw new Error("Failed to fetch salary details for worker");
+    return response.json();
   },
 };

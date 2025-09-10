@@ -26,13 +26,23 @@ import { useLoader } from "@/hooks/useLoader";
 import toast from "react-hot-toast";
 import { products } from "@/constant";
 import { ADMINICONS } from "@/Icons/AdminIcons";
+import { api } from "@/services/api";
 
 export function SubmitWork() {
+  const { adddailyWork } = useWorkContext();
+  const [loading, setLoading] = useState(false);
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workDate, setWorkDate] = useState(new Date());
   const [workItems, setWorkItems] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { workers, fetchWorkers, adddailyWork, token } = useWorkContext();
+  const [workers, setWorkers] = useState([]);
+
+  // Filters
+  const [name, setName] = useState("");
+  const [village, setVillage] = useState("");
+  const [gender, setGender] = useState("all");
+  const [status, setStatus] = useState("all");
+  const [phone, setPhone] = useState("");
 
   const addWorkItem = () => {
     const newItem = {
@@ -103,7 +113,6 @@ export function SubmitWork() {
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
     // Here you would typically send the data to your backend API
     await adddailyWork({
       workerId: selectedWorker,
@@ -118,13 +127,29 @@ export function SubmitWork() {
     setIsSubmitting(false);
   };
 
-  const selectedWorkerData = workers.find((w) => w._id === selectedWorker);
+  const fetchWorkers = async () => {
+    setLoading(true);
+    try {
+      const workersData = await api.getAllWorkers({
+        name,
+        village,
+        gender,
+        status,
+        phone,
+      });
+      setWorkers(workersData.data);
+    } catch (err) {
+      console.error("Error fetching workers:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const selectedWorkerData = workers?.find((w) => w._id === selectedWorker);
 
-  console.log("Workers:", workers);
-  
   useEffect(() => {
     fetchWorkers();
-  }, []);
+  }, [name, village, gender, phone, status]);
+
 
   return (
     <div className="space-y-6">

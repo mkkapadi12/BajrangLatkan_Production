@@ -43,3 +43,17 @@ export const products = [
   { id: "4", name: "Shivling Latkan", rate: 10, unit: "packet" },
   { id: "5", name: "Thingali Latkan", rate: 35, unit: "packet" },
 ];
+
+//
+export const workerstatusItem = [
+  { label: "All Status", value: "all" },
+  { label: "Active", value: "Active" },
+  { label: "Inactive", value: "Inactive" },
+];
+
+export const salarystatusItem = [
+  { label: "All Status", value: "all" },
+  { label: "Pending", value: "Pending" },
+  // { label: "Processing", value: "Processing" },
+  { label: "Paid", value: "Paid" },
+];

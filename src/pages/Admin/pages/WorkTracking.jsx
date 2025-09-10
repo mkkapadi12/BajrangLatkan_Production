@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -11,13 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,11 +19,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect } from "react";
 import { api } from "@/services/api";
 import { ADMINICONS } from "@/Icons/AdminIcons";
 import { getStatusColor } from "@/hooks/useStatusColor";
 import { useNavigate } from "react-router-dom";
+import { Workerfilters } from "../components/Workerfilters";
 
 export function WorkTracking() {
   const [workers, setWorkers] = useState([]);
@@ -77,7 +70,6 @@ export function WorkTracking() {
   useEffect(() => {
     fetchWorkers();
   }, [name, village, gender, phone, status]);
-
 
   return (
     <div className="space-y-6">
@@ -144,51 +136,19 @@ export function WorkTracking() {
       </div>
 
       {/* Filters */}
-      <Card className="py-3 border-l-4 shadow-lg border-bajrang-brand">
-        <CardContent className="grid gap-4 md:p-6 sm:grid-cols-5">
-          <Input
-            placeholder="Search by Name..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border-l-4 border-bajrang-accent"
-          />
-          <Input
-            placeholder="Search by Village..."
-            value={village}
-            onChange={(e) => setVillage(e.target.value)}
-            className="border-l-4 border-bajrang-accent"
-          />
-          <Input
-            type="number"
-            placeholder="Search by Phone..."
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="border-l-4 border-bajrang-accent"
-          />
-          <Select value={gender} onValueChange={setGender}>
-            <SelectTrigger className="w-full border-l-4 border-bajrang-accent">
-              {/* <ADMINICONS.FILTER className="w-4 h-4 mr-2" /> */}
-              <SelectValue placeholder="Filter by Gender" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Genders</SelectItem>
-              <SelectItem value="Male">Male</SelectItem>
-              <SelectItem value="Female">Female</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-full border-l-4 border-bajrang-accent">
-              <SelectValue placeholder="Filter by Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Inactive">Inactive</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
+
+      <Workerfilters
+        name={name}
+        setName={setName}
+        village={village}
+        setVillage={setVillage}
+        gender={gender}
+        setGender={setGender}
+        phone={phone}
+        setPhone={setPhone}
+        status={status}
+        setStatus={setStatus}
+      />
 
       {/* Table */}
       <Card className="border-l-4 ">

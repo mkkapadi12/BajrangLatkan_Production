@@ -91,12 +91,6 @@ const WorkProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Effect to sync token with localStorage
-  useEffect(() => {
-    const storedToken = localStorage.getItem("adminToken");
-    setToken(storedToken);
-  }, []);
-
   return (
     <WorkContext.Provider
       value={{
@@ -114,7 +108,7 @@ const WorkProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use Admin Context
+// Custom hook to use Work Context
 const useWorkContext = () => {
   return useContext(WorkContext);
 };
