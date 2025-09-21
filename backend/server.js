@@ -12,6 +12,7 @@ const admin_route = require("./routes/admin.routes");
 const work_route = require("./routes/work.routes");
 const workers_route = require("./routes/workers.routes");
 const salary_route = require("./routes/salary.routes");
+const workerData_route = require("./routes/workerData.routes");
 
 app.use(
   cors({
@@ -61,6 +62,9 @@ app.use("/api/workers", workers_route);
 
 //Salary Routes
 app.use("/api/salary", salary_route);
+
+//Worker side data routes
+app.use("/api/workerdata", workerData_route);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

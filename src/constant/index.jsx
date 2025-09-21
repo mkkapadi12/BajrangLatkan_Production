@@ -1,4 +1,4 @@
-import { Factory, Target, Award } from "lucide-react";
+import { ICONS } from "@/Icons/icons";
 
 export const desktopNavigation = [
   { name: "Home", to: "/" },
@@ -18,17 +18,17 @@ export const mobileNavigation = [
 
 export const aboutData = [
   {
-    icon: <Target className="w-10 h-10 text-bajrang-accent" />,
+    icon: <ICONS.TARGET className="w-10 h-10 text-bajrang-accent" />,
     title: "Our Mission",
     desc: "To digitize and simplify latkan manufacturing with transparency, efficiency, and trust.",
   },
   {
-    icon: <Factory className="w-10 h-10 text-bajrang-secondary" />,
+    icon: <ICONS.FACTORY className="w-10 h-10 text-bajrang-secondary" />,
     title: "Our Vision",
     desc: "To be the trusted backbone for workers and families driving the handicraft industry.",
   },
   {
-    icon: <Award className="w-10 h-10 text-bajrang-success" />,
+    icon: <ICONS.AWARD className="w-10 h-10 text-bajrang-success" />,
     title: "Our Values",
     desc: "Integrity, craftsmanship, and innovation that respects tradition and embraces progress.",
   },
@@ -56,4 +56,22 @@ export const salarystatusItem = [
   { label: "Pending", value: "Pending" },
   // { label: "Processing", value: "Processing" },
   { label: "Paid", value: "Paid" },
+];
+
+export const sidebarItems = [
+  { icon: ICONS.HOME, label: "Dashboard", href: "/worker/dashboard" },
+  {
+    icon: ICONS.PACKAGE,
+    label: "Assigned Work",
+    href: "/worker/assigned-work",
+  },
+  { icon: ICONS.HISTORY, label: "Work History", href: "/worker/work-history" },
+  {
+    icon: ICONS.DOLLARSIGN,
+    label: "Salary & Earnings",
+    href: "/worker/salary",
+  },
+  { icon: ICONS.BELL, label: "Notifications", href: "/worker/notifications" },
+  { icon: ICONS.USER, label: "Profile", href: "/worker/profile" },
+  { icon: ICONS.HELPCIRCLE, label: "Help & Support", href: "/worker/help" },
 ];

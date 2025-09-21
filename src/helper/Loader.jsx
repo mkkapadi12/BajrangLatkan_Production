@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Loader = ({ text }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-4">
+    <div className="flex flex-col items-center justify-center !h-full space-y-4">
       {/* Animated Dots */}
       <div className="flex space-x-2">
         <motion.div

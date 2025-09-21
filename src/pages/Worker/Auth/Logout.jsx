@@ -9,7 +9,7 @@ const Logout = () => {
     userLogout(); // Call the logout function
   }, [userLogout]);
 
-  return <Navigate to="/" />;
+  return <Navigate to="/login" />;
 };
 
 export default Logout;

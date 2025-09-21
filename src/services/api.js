@@ -147,6 +147,8 @@ export const api = {
     }
   },
 
+  //Admin Auth Services
+
   async adminSignup(data) {
     try {
       const response = await fetch(`${BASE_URL}/admin/signup`, {

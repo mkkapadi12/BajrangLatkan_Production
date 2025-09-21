@@ -6,65 +6,6 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/context/AuthContext";
 
-const mockWorkerData = {
-  name: "Rajesh Kumar",
-  workerId: "WORKER01",
-  status: "Active",
-  profileImage: "/indian-worker-profile.jpg",
-  stats: {
-    assignedTasks: 12,
-    completedWork: 8,
-    earnings: 4500,
-    workRate: 85,
-  },
-  assignedWork: [
-    {
-      id: 1,
-      product: "Beaded Necklace",
-      quantity: 50,
-      deadline: "2024-01-15",
-      status: "In Progress",
-      completed: 30,
-    },
-    {
-      id: 2,
-      product: "Thread Bangles",
-      quantity: 100,
-      deadline: "2024-01-18",
-      status: "Pending",
-      completed: 0,
-    },
-    {
-      id: 3,
-      product: "Decorative Latkan",
-      quantity: 75,
-      deadline: "2024-01-20",
-      status: "Completed",
-      completed: 75,
-    },
-  ],
-  notifications: [
-    {
-      id: 1,
-      message: "New raw material has been assigned for Thread Bangles",
-      time: "2 hours ago",
-      type: "info",
-    },
-    {
-      id: 2,
-      message: "Your salary will be credited on 5th January",
-      time: "1 day ago",
-      type: "success",
-    },
-    {
-      id: 3,
-      message: "Deadline approaching for Beaded Necklace project",
-      time: "2 days ago",
-      type: "warning",
-    },
-  ],
-};
-
 const getStatusColor = (status) => {
   switch (status) {
     case "Completed":
@@ -131,13 +72,12 @@ export function DashboardOverview() {
               <Badge
                 className={cn(
                   "px-3 py-1 text-sm sm:text-base",
-                  mockWorkerData.status === "Active"
+                  user?.status === "Active"
                     ? "bg-green-100 text-green-800 border-green-200"
                     : "bg-red-100 text-red-800 border-red-200"
                 )}
               >
-                {mockWorkerData.status === "Active" ? "✅" : "❌"}{" "}
-                {mockWorkerData.status}
+                {user?.status === "Active" ? "✅" : "❌"} {user?.status}
               </Badge>
             </div>
           </div>
@@ -154,7 +94,7 @@ export function DashboardOverview() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-primary">
-              {mockWorkerData.stats.assignedTasks}
+              {/* {mockWorkerData.stats.assignedTasks} */} 7
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
               Active projects
@@ -170,7 +110,7 @@ export function DashboardOverview() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {mockWorkerData.stats.completedWork}
+              {/* {mockWorkerData.stats.completedWork} */} 12
             </div>
             <p className="mt-1 text-xs text-muted-foreground">This month</p>
           </CardContent>
@@ -183,9 +123,7 @@ export function DashboardOverview() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-secondary">
-              ₹{mockWorkerData.stats.earnings}
-            </div>
+            <div className="text-2xl font-bold text-secondary">₹8500</div>
             <p className="mt-1 text-xs text-muted-foreground">Current month</p>
           </CardContent>
         </Card>
@@ -198,9 +136,11 @@ export function DashboardOverview() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
-              {mockWorkerData.stats.workRate}%
+              {/* {mockWorkerData.stats.workRate}% */}
+              45%
             </div>
-            <Progress value={mockWorkerData.stats.workRate} className="mt-2" />
+            {/* <Progress value={mockWorkerData.stats.workRate} className="mt-2" /> */}
+            <Progress value={45} className="mt-2" />
           </CardContent>
         </Card>
       </div>
@@ -214,7 +154,7 @@ export function DashboardOverview() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               {mockWorkerData.assignedWork.slice(0, 3).map((work) => (
                 <div
                   key={work.id}
@@ -233,7 +173,7 @@ export function DashboardOverview() {
                   </Badge>
                 </div>
               ))}
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
@@ -244,7 +184,7 @@ export function DashboardOverview() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               {mockWorkerData.notifications.slice(0, 3).map((notification) => (
                 <div
                   key={notification.id}
@@ -261,7 +201,7 @@ export function DashboardOverview() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>

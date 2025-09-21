@@ -33,6 +33,7 @@ import { WorkerDetails } from "./pages/Admin/pages/WorkerDetails";
 import { SubmitWork } from "./pages/Admin/pages/SubmitWork";
 import MonthlyWorkDetails from "./pages/Admin/pages/MonthlyWorkDetails";
 import SalaryDetails from "./pages/Admin/pages/SalaryDetails";
+import WorkHistory from "./pages/Worker/pages/WorkHistory";
 
 const App = () => {
   return (
@@ -57,7 +58,8 @@ const App = () => {
           {/* Worker Layout */}
           <Route path="/worker" element={<WorkerDashboardLayout />}>
             <Route path="dashboard" element={<DashboardOverview />} />
-            <Route path="work" element={<AssignedWork />} />
+            <Route path="assigned-work" element={<AssignedWork />} />
+            <Route path="work-history" element={<WorkHistory />} />
             <Route path="salary" element={<SalaryEarnings />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="profile" element={<Profile />} />

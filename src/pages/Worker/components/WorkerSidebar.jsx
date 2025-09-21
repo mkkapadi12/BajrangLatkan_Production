@@ -11,18 +11,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ICONS } from "@/Icons/icons";
 import { Separator } from "@/components/ui/separator";
-
-const sidebarItems = [
-  { icon: Home, label: "Dashboard", id: "dashboard" },
-  { icon: Package, label: "Assigned Work", id: "work" },
-  { icon: DollarSign, label: "Salary & Earnings", id: "salary" },
-  { icon: Bell, label: "Notifications", id: "notifications" },
-  { icon: User, label: "Profile", id: "profile" },
-  { icon: HelpCircle, label: "Help & Support", id: "help" },
-];
+import { sidebarItems } from "@/constant";
 
 export function WorkerSidebar({
   activeTab,
@@ -30,6 +22,8 @@ export function WorkerSidebar({
   sidebarOpen,
   setSidebarOpen,
 }) {
+  const location = useLocation();
+
   return (
     <>
       {/* Mobile Sidebar Overlay */}
@@ -72,34 +66,37 @@ export function WorkerSidebar({
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto">
             <ul className="flex flex-col space-y-5">
-              {sidebarItems.map((item) => (
-                <li key={item.id}>
-                  <Link to={`/worker/${item.id}`}>
-                    <button
-                      onClick={() => {
-                        onTabChange(item.id);
-                        setSidebarOpen(false);
-                      }}
-                      className={cn(
-                        "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-lg font-semibold transition-all duration-300",
-                        activeTab === item.id
-                          ? "text-bajrang-brand bg-bajrang-accent/20 shadow-sm"
-                          : "text-bajrang-text hover:text-bajrang-brand hover:bg-bajrang-accent/10"
-                      )}
-                    >
-                      <item.icon
+              {sidebarItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.href;
+
+                return (
+                  <li key={item.href}>
+                    <Link to={item.href}>
+                      <button
+                        onClick={() => {
+                          onTabChange(item.href);
+                          setSidebarOpen(false);
+                        }}
                         className={cn(
-                          "w-5 h-5",
-                          activeTab === item.id
-                            ? "text-bajrang-brand"
-                            : "text-gray-500"
+                          "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-lg font-semibold transition-all duration-300",
+                          isActive
+                            ? "text-bajrang-brand bg-bajrang-accent/20 shadow-sm"
+                            : "text-bajrang-text hover:text-bajrang-brand hover:bg-bajrang-accent/10"
                         )}
-                      />
-                      <span>{item.label}</span>
-                    </button>
-                  </Link>
-                </li>
-              ))}
+                      >
+                        <Icon
+                          className={cn(
+                            "w-5 h-5",
+                            isActive ? "text-bajrang-brand" : "text-gray-500"
+                          )}
+                        />
+                        <span>{item.label}</span>
+                      </button>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 

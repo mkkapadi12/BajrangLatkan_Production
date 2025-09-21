@@ -40,7 +40,7 @@ export function WorkerDashboardLayout() {
               </Button>
 
               <h1 className="text-xl font-extrabold text-white drop-shadow-md">
-                {sidebarItems.find((item) => item.id === activeTab)?.label ||
+                {sidebarItems.find((item) => item.href === activeTab)?.label ||
                   "Dashboard"}
               </h1>
             </div>
@@ -85,7 +85,7 @@ export function WorkerDashboardLayout() {
 
           {/* Content */}
           <main className="flex-1 p-3 overflow-auto md:p-6 bg-bajrang-bg">
-            <div className="w-full p-4 bg-white shadow-md rounded-2xl">
+            <div className="w-full p-4 overflow-y-auto bg-white shadow-md rounded-2xl">
               <Outlet />
             </div>
           </main>
