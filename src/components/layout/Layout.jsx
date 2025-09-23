@@ -8,6 +8,7 @@ const Layout = ({ children }) => {
 
   // Hide Navbar/Footer for auth routes & worker dashboard routes
   const hideLayout =
+    location.pathname === "/404" ||
     location.pathname.startsWith("/worker") ||
     location.pathname === "/login" ||
     location.pathname === "/signup" ||

@@ -2,8 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { aboutData } from "@/constant";
 import { ICONS } from "@/Icons/icons";
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 const About = () => {
+  useDocumentTitle("About Bajrang Latkan - Our Mission & Vision");
+  
   return (
     <div className="min-h-screen bg-bajrang-bg text-bajrang-text">
       {/* Hero Section */}

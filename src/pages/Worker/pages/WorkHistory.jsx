@@ -74,7 +74,7 @@ const WorkHistory = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <Calendar className="w-4 h-4 text-muted-foreground" />
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
             <SelectTrigger className="w-48">
@@ -83,6 +83,7 @@ const WorkHistory = () => {
             <SelectContent>
               <SelectItem value="September 2025">September 2025</SelectItem>
               <SelectItem value="October 2025">October 2025</SelectItem>
+              <SelectItem value="August 2025">August 2025</SelectItem>
             </SelectContent>
           </Select>
           <Button>
@@ -94,8 +95,8 @@ const WorkHistory = () => {
       </div>
 
       {/* Monthly Summary Cards */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card>
+      <div className="grid grid-cols-1 gap-2 sm:gap-4 md:grid-cols-3">
+        <Card className="gap-0 sm:gap-4">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">
               Total Earnings
@@ -110,7 +111,7 @@ const WorkHistory = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="gap-0 sm:gap-4">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">Total Packets</CardTitle>
             <Package className="w-4 h-4 text-muted-foreground" />
@@ -123,7 +124,7 @@ const WorkHistory = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="gap-0 sm:gap-4">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">Working Days</CardTitle>
             <Calendar className="w-4 h-4 text-muted-foreground" />
@@ -155,7 +156,7 @@ const WorkHistory = () => {
           sortedDailyWork.map((dayWork, index) => (
             <Card key={index} className="overflow-hidden">
               <CardHeader className="bg-muted/50">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <CardTitle className="text-base font-medium">
                     {formatDate(dayWork.date)}
                   </CardTitle>

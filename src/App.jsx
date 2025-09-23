@@ -1,25 +1,45 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//rrd
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
+//layouts
 import Layout from "./components/layout/Layout";
+import { WorkerDashboardLayout } from "./pages/Worker/Layout/WorkerDashboardLayout";
+import AdminLayout from "./pages/Admin/Layout/AdminLayout";
+
+//common pages
 import HomePage from "./pages/Home";
-import AboutPage from "./pages/About";
-import ContactPage from "./pages/Contact";
+import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+
+//Worker Auth pages
 import LoginPage from "./pages/Worker/Auth/Login";
 import SignupPage from "./pages/Worker/Auth/SignUp";
-import { Toaster } from "react-hot-toast";
 import Logout from "./pages/Worker/Auth/Logout";
-import { WorkerDashboardLayout } from "./pages/Worker/Layout/WorkerDashboardLayout";
+
+//Worker Dashboard pages
 import { DashboardOverview } from "./pages/Worker/components/DashboardOverview";
 import { AssignedWork } from "./pages/Worker/components/AssignedWork";
 import { SalaryEarnings } from "./pages/Worker/components/SalaryEarnings";
 import { Notifications } from "./pages/Worker/components/Notifications";
 import { Profile } from "./pages/Worker/components/Profile";
 import { HelpSupport } from "./pages/Worker/components/HelpSupport";
+import WorkHistory from "./pages/Worker/pages/WorkHistory";
+
+//Admin Auth pages
 import AdminLogin from "./pages/Admin/Auth/AdminLogin";
 import AdminLogout from "./pages/Admin/Auth/AdminLogout";
 import AdminSignup from "./pages/Admin/Auth/AdminSignup";
+
+//Admin Dashboard pages
 import AdminWelcome from "./pages/Admin/pages/AdminWelcome";
-import AdminLayout from "./pages/Admin/Layout/AdminLayout";
 import AdminDashboardOverview from "./pages/Admin/pages/AdminDashboardOverview";
 import { WorkersManagement } from "./pages/Admin/pages/WorkersManagement";
 import { AssignWork } from "./pages/Admin/pages/AssignWork";
@@ -33,7 +53,6 @@ import { WorkerDetails } from "./pages/Admin/pages/WorkerDetails";
 import { SubmitWork } from "./pages/Admin/pages/SubmitWork";
 import MonthlyWorkDetails from "./pages/Admin/pages/MonthlyWorkDetails";
 import SalaryDetails from "./pages/Admin/pages/SalaryDetails";
-import WorkHistory from "./pages/Worker/pages/WorkHistory";
 
 const App = () => {
   return (
@@ -52,8 +71,8 @@ const App = () => {
 
           {/* Common pages */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Worker Layout */}
           <Route path="/worker" element={<WorkerDashboardLayout />}>
@@ -89,7 +108,8 @@ const App = () => {
           </Route>
 
           {/* 404 Not Found */}
-          <Route path="*" element={<div>404 Not Found</div>} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </Layout>
       <Toaster />

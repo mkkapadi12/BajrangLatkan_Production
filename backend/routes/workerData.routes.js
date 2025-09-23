@@ -7,4 +7,10 @@ router.get("/data", workerDataController.home);
 
 router.get("/workhistory", authMiddleware, workerDataController.getWorkHistory);
 
+router.get(
+  "/salarydetails",
+  authMiddleware,
+  workerDataController.getSalaryDetails
+);
+
 module.exports = router;

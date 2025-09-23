@@ -16,10 +16,25 @@ export const api = {
         },
       });
 
-      // console.log("Response:", response);
       return response.data;
     } catch (error) {
       console.error("Error fetching work history:", error.message);
+      throw error;
+    }
+  },
+
+  async getSalaryDetails(workerId) {
+    try {
+      const response = await axios.get(`${BASE_URL}/workerdata/salarydetails`, {
+        params: { workerId },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("workertoken")}`,
+        },
+      });
+      // console.log("Response:", response);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching salary details:", error.message);
       throw error;
     }
   },
