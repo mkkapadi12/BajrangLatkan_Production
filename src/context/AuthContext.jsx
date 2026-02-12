@@ -9,7 +9,7 @@ const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api/auth";
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(
-    localStorage.getItem("workertoken") || null
+    localStorage.getItem("workertoken") || null,
   );
   const [user, setUser] = useState(""); // Initialize with null to indicate no user initially
   const isLoggedIn = !!token;

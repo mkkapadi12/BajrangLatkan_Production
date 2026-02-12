@@ -10,7 +10,7 @@ const BASE_URL =
 
 const AdminProvider = ({ children }) => {
   const [token, setToken] = useState(
-    localStorage.getItem("adminToken") || null
+    localStorage.getItem("adminToken") || null,
   );
   const [admin, setAdmin] = useState(""); // Initialize with null to indicate no user initially
   // const [file, setFile] = useState(null);

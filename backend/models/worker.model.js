@@ -102,44 +102,34 @@ const workerSchema = new mongoose.Schema(
       type: String, // Parent who manages (e.g., "Father" or "Mother")
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-//Secure the password with bcrypt + Auto-generate WorkerId
-workerSchema.pre("save", async function (next) {
+// Secure the password with bcrypt + Auto-generate WorkerId
+workerSchema.pre("save", async function () {
   const user = this;
 
-  try {
-    // 🔹 Generate Worker ID only for new workers
-    if (user.isNew) {
-      const lastWorker = await this.constructor
-        .findOne({}, { workerId: 1 })
-        .sort({ createdAt: -1 }); // Get the last created worker
+  // 🔹 Generate Worker ID only for new workers
+  if (user.isNew) {
+    const lastWorker = await user.constructor
+      .findOne({}, { workerId: 1 })
+      .sort({ createdAt: -1 });
 
-      let newId = "WORKER01"; // Default ID for first worker
+    let newId = "WORKER01";
 
-      if (lastWorker && lastWorker.workerId) {
-        const lastIdNum = parseInt(
-          lastWorker.workerId.replace("WORKER", ""),
-          10
-        );
-        const nextIdNum = lastIdNum + 1;
-        newId = `WORKER${nextIdNum.toString().padStart(2, "0")}`;
-      }
-
-      user.workerId = newId;
+    if (lastWorker?.workerId) {
+      const lastIdNum = parseInt(lastWorker.workerId.replace("WORKER", ""), 10);
+      const nextIdNum = lastIdNum + 1;
+      newId = `WORKER${nextIdNum.toString().padStart(2, "0")}`;
     }
 
-    // 🔹 Hash password only if modified
-    if (user.isModified("password")) {
-      const saltRound = await bcrypt.genSalt(10);
-      const hash_password = await bcrypt.hash(user.password, saltRound);
-      user.password = hash_password;
-    }
+    user.workerId = newId;
+  }
 
-    next();
-  } catch (error) {
-    next(error);
+  // 🔹 Hash password only if modified
+  if (user.isModified("password")) {
+    const saltRound = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, saltRound);
   }
 });
 
@@ -162,7 +152,7 @@ workerSchema.methods.generateToken = async function () {
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: "1h",
-      }
+      },
     );
   } catch (error) {
     console.error(error);

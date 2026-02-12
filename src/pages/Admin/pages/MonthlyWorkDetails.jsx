@@ -29,12 +29,14 @@ const availableMonths = [
   "July 2025",
   "June 2025",
   "May 2025",
+  "January 2026",
+  "February 2026",
 ];
 
 function MonthlyWorkDetails() {
   const { id } = useParams();
   const router = useNavigate();
-  const [selectedMonth, setSelectedMonth] = useState("September 2025");
+  const [selectedMonth, setSelectedMonth] = useState("February 2026");
   const { getMonthlyWork } = useWorkContext();
   const [work, setWork] = useState(null); // single object, not array
   const [errorMsg, setErrorMsg] = useState(null);
@@ -51,26 +53,26 @@ function MonthlyWorkDetails() {
             sum +
             day.products.reduce(
               (daySum, product) => daySum + product.packets,
-              0
+              0,
             ),
-          0
+          0,
         ),
         totalEarnings: currentWorkData.dailyWork.reduce(
           (sum, day) => sum + day.totalEarnings,
-          0
+          0,
         ),
         avgDailyEarnings:
           currentWorkData.dailyWork.length > 0
             ? currentWorkData.dailyWork.reduce(
                 (sum, day) => sum + day.totalEarnings,
-                0
+                0,
               ) / currentWorkData.dailyWork.length
             : 0,
         topProduct: currentWorkData.dailyWork
           .flatMap((day) => day.products)
           .reduce((acc, product) => {
             const existing = acc.find(
-              (p) => p.productName === product.productName
+              (p) => p.productName === product.productName,
             );
             if (existing) {
               existing.packets += product.packets;

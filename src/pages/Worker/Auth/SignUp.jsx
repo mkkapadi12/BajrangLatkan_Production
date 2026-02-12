@@ -452,7 +452,7 @@ export default function WorkerSignup() {
                             handleNestedChange(
                               "address",
                               "village",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           required
@@ -465,7 +465,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "address",
                             "taluka",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         required
@@ -477,7 +477,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "address",
                             "district",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         required
@@ -496,7 +496,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "emergencyContact",
                             "name",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         required
@@ -515,7 +515,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "emergencyContact",
                             "phone",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         required
@@ -633,7 +633,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "bankDetails",
                             "accountHolderName",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       />
@@ -647,7 +647,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "bankDetails",
                             "accountNumber",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       />
@@ -664,7 +664,7 @@ export default function WorkerSignup() {
                           handleNestedChange(
                             "bankDetails",
                             "ifsc",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       />
@@ -681,7 +681,7 @@ export default function WorkerSignup() {
                             handleNestedChange(
                               "bankDetails",
                               "upiId",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                         />

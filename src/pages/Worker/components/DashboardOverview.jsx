@@ -35,8 +35,6 @@ const getNotificationIcon = (type) => {
 export function DashboardOverview() {
   const { user } = useAuthContext();
 
-  console.log("Worker Data :", user);
-
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -74,7 +72,7 @@ export function DashboardOverview() {
                   "px-3 py-1 text-sm sm:text-base",
                   user?.status === "Active"
                     ? "bg-green-100 text-green-800 border-green-200"
-                    : "bg-red-100 text-red-800 border-red-200"
+                    : "bg-red-100 text-red-800 border-red-200",
                 )}
               >
                 {user?.status === "Active" ? "✅" : "❌"} {user?.status}

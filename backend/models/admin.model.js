@@ -47,23 +47,16 @@ const adminSchema = new mongoose.Schema(
       default: "admin",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // 🔑 Hash password before saving
-adminSchema.pre("save", async function (next) {
-  try {
-    if (!this.isModified("password")) {
-      return next();
-    }
+adminSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
-    const salt = await bcrypt.genSalt(10);
-    const hash_password = await bcrypt.hash(this.password, salt);
-    this.password = hash_password;
-    next();
-  } catch (error) {
-    next(error);
-  }
+  const salt = await bcrypt.genSalt(10);
+  const hash_password = await bcrypt.hash(this.password, salt);
+  this.password = hash_password;
 });
 
 // 🔑 Compare password method
@@ -83,7 +76,7 @@ adminSchema.methods.generateToken = async function () {
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: "1h",
-      }
+      },
     );
   } catch (error) {
     console.error(error);

@@ -33,7 +33,7 @@ export function SalaryEarnings() {
   const { user } = useAuthContext();
   const [salaryDetails, setSalaryDetails] = useState();
   const [loading, setLoading] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState("September 2025");
+  const [selectedMonth, setSelectedMonth] = useState("February 2026");
 
   const currentMonthData =
     salaryDetails?.months?.find((month) => month.month === selectedMonth) ||
@@ -80,7 +80,7 @@ export function SalaryEarnings() {
           <SelectContent>
             <SelectItem value="September 2025">September 2025</SelectItem>
             <SelectItem value="October 2025">October 2025</SelectItem>
-            <SelectItem value="August 2025">August 2025</SelectItem>
+            <SelectItem value="February 2026">February 2026</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -194,7 +194,7 @@ export function SalaryEarnings() {
                           <p className="text-xs text-muted-foreground">
                             ₹
                             {(product.totalEarnings / product.packets).toFixed(
-                              2
+                              2,
                             )}
                             /packet
                           </p>
@@ -263,7 +263,7 @@ export function SalaryEarnings() {
                     </p>
                   </div>
 
-                  {currentMonthData?.status === "Paid" && (
+                  {currentMonthData?.status !== "Paid" && (
                     <DownloadSalarySlip
                       salaryData={currentMonthData}
                       workerData={user}

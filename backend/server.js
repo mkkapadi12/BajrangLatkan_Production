@@ -19,7 +19,7 @@ app.use(
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
