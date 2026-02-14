@@ -17,168 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ArrowLeft,
-  DollarSign,
-  Calendar,
-  Package,
-  TrendingUp,
-  User,
-  MapPin,
-  Phone,
-  CreditCard,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "@/services/api";
 import Loader from "@/helper/Loader";
-
-// Mock data based on the provided structure
-const mockWorkerSalaryData = {
-  _id: "68bc0481af04fb854a93c700",
-  worker: {
-    address: {
-      village: "Sukhpur",
-      taluka: "Visavadar",
-      district: "Junagadh",
-    },
-    emergencyContact: {
-      name: "Ronak Kapadi",
-      phone: "9714170940",
-    },
-    bankDetails: {
-      accountHolderName: "MAYUR KALIDAS KAPADI",
-      accountNumber: "9979274398799",
-      ifsc: "HDFC000123",
-      upiId: "9727434078@paytm",
-    },
-    _id: "68b8814d871fa3659ba06cf0",
-    fullName: "Mayur Kapadi",
-    fatherHusbandName: "Kalidas Kapadi",
-    dateOfBirth: "2005-03-24T00:00:00.000Z",
-    gender: "Male",
-    photo: "",
-    phone: "9727434078",
-    alternatePhone: "",
-    skills: ["Beads", "Threading"],
-    workPreference: "Full-time",
-    experience: 1,
-    notes: "",
-    email: "mayurkapadi12@gmail.com",
-    status: "Active",
-    dateOfJoining: "2025-09-03T17:56:29.788Z",
-    workerId: "WORKER01",
-  },
-  months: [
-    {
-      status: "Pending",
-      month: "September 2025",
-      totalPackets: 278,
-      productSummary: [
-        {
-          productName: "Hodi",
-          packets: 80,
-          totalEarnings: 560,
-          _id: "68c15de4fa132eeca385d674",
-        },
-        {
-          productName: "Fancy",
-          packets: 63,
-          totalEarnings: 756,
-          _id: "68c15de4fa132eeca385d675",
-        },
-        {
-          productName: "NewProduct",
-          packets: 10,
-          totalEarnings: 150,
-          _id: "68c15de4fa132eeca385d676",
-        },
-        {
-          productName: "Fancy Latkan",
-          packets: 67,
-          totalEarnings: 670,
-          _id: "68c15de4fa132eeca385d677",
-        },
-        {
-          productName: "Spring Latkan",
-          packets: 34,
-          totalEarnings: 204,
-          _id: "68c15de4fa132eeca385d678",
-        },
-        {
-          productName: "Hodi Latkan",
-          packets: 12,
-          totalEarnings: 84,
-          _id: "68c15de4fa132eeca385d679",
-        },
-        {
-          productName: "Thingali Latkan",
-          packets: 12,
-          totalEarnings: 420,
-          _id: "68c15de4fa132eeca385d67a",
-        },
-      ],
-      totalEarnings: 2844,
-      _id: "68bc0481af04fb854a93c702",
-    },
-    {
-      status: "Paid",
-      month: "October 2025",
-      totalPackets: 74,
-      productSummary: [
-        {
-          productName: "Hodi",
-          packets: 14,
-          totalEarnings: 98,
-          _id: "68bc05fcaf04fb854a93c722",
-        },
-        {
-          productName: "Fancy",
-          packets: 20,
-          totalEarnings: 240,
-          _id: "68bc05fcaf04fb854a93c723",
-        },
-        {
-          productName: "spring",
-          packets: 40,
-          totalEarnings: 240,
-          _id: "68bc05fcaf04fb854a93c724",
-        },
-      ],
-      totalEarnings: 578,
-      _id: "68bc05fcaf04fb854a93c721",
-    },
-    {
-      status: "Processing",
-      month: "August 2025",
-      totalPackets: 156,
-      productSummary: [
-        {
-          productName: "Hodi",
-          packets: 45,
-          totalEarnings: 315,
-          _id: "68bc05fcaf04fb854a93c725",
-        },
-        {
-          productName: "Fancy Latkan",
-          packets: 78,
-          totalEarnings: 780,
-          _id: "68bc05fcaf04fb854a93c726",
-        },
-        {
-          productName: "Spring Latkan",
-          packets: 33,
-          totalEarnings: 198,
-          _id: "68bc05fcaf04fb854a93c727",
-        },
-      ],
-      totalEarnings: 1293,
-      _id: "68bc05fcaf04fb854a93c728",
-    },
-  ],
-};
+import { getStatusColor, getStatusIcon } from "@/hooks/usePaymentStatus";
+import { ADMINICONS } from "@/Icons/AdminIcons";
 
 const SalaryDetails = () => {
   const { id } = useParams();
@@ -195,40 +38,14 @@ const SalaryDetails = () => {
       ? workerData?.months
       : workerData?.months.filter((month) => month.month === selectedMonth);
 
-  const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-        return "bg-[#16A34A] text-white";
-      case "processing":
-        return "bg-[#EFB700] text-white";
-      case "pending":
-        return "bg-[#DC2626] text-white";
-      default:
-        return "bg-[#94A3B8] text-white";
-    }
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-        return <CheckCircle className="w-4 h-4" />;
-      case "processing":
-        return <Clock className="w-4 h-4" />;
-      case "pending":
-        return <AlertCircle className="w-4 h-4" />;
-      default:
-        return <Clock className="w-4 h-4" />;
-    }
-  };
-
   const totalStats = {
     totalEarnings: workerData?.months.reduce(
       (acc, month) => acc + month.totalEarnings,
-      0
+      0,
     ),
     totalPackets: workerData?.months.reduce(
       (acc, month) => acc + month.totalPackets,
-      0
+      0,
     ),
     paidAmount: workerData?.months
       .filter((m) => m.status === "Paid")
@@ -243,7 +60,7 @@ const SalaryDetails = () => {
       setLoading(true);
       try {
         const salarydetails = await api.getSalaryDetailsByWorker(id);
-        console.log("salarydetails :", salarydetails);
+        // console.log("salarydetails :", salarydetails);
         if (salarydetails) {
           setSalarydetails(salarydetails);
         }
@@ -274,7 +91,7 @@ const SalaryDetails = () => {
           onClick={() => router(-1)}
           className="border-[#7B1E3A] text-[#7B1E3A] hover:bg-[#7B1E3A] hover:text-white"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ADMINICONS.ARROWLEFT className="w-4 h-4 mr-2" />
           Back to Salary Management
         </Button>
       </div>
@@ -284,7 +101,7 @@ const SalaryDetails = () => {
         <Card className="border-[#E2E8F0]">
           <CardHeader>
             <CardTitle className="text-[#1E293B] flex items-center gap-2">
-              <User className="w-5 h-5" />
+              <ADMINICONS.USER className="w-5 h-5" />
               Worker Information
             </CardTitle>
           </CardHeader>
@@ -302,14 +119,14 @@ const SalaryDetails = () => {
             <div>
               <p className="text-sm text-[#475569]">Phone</p>
               <p className="font-medium text-[#1E293B] flex items-center gap-2">
-                <Phone className="w-4 h-4" />
+                <ADMINICONS.PHONE className="w-4 h-4" />
                 {worker?.phone}
               </p>
             </div>
             <div>
               <p className="text-sm text-[#475569]">Address</p>
               <p className="font-medium text-[#1E293B] flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+                <ADMINICONS.MAPPIN className="w-4 h-4" />
                 {worker?.address.village}, {worker?.address.taluka},{" "}
                 {worker?.address.district}
               </p>
@@ -334,7 +151,7 @@ const SalaryDetails = () => {
         <Card className="border-[#E2E8F0]">
           <CardHeader>
             <CardTitle className="text-[#1E293B] flex items-center gap-2">
-              <CreditCard className="w-5 h-5" />
+              <ADMINICONS.CREDITCARD className="w-5 h-5" />
               Bank Details
             </CardTitle>
           </CardHeader>
@@ -369,7 +186,7 @@ const SalaryDetails = () => {
         <Card className="border-[#E2E8F0]">
           <CardHeader>
             <CardTitle className="text-[#1E293B] flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
+              <ADMINICONS.TRENDINGUP className="w-5 h-5" />
               Overall Statistics
             </CardTitle>
           </CardHeader>
@@ -413,7 +230,7 @@ const SalaryDetails = () => {
             </h3>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
               <SelectTrigger className="w-full sm:w-[200px]">
-                <Calendar className="w-4 h-4 mr-2" />
+                <ADMINICONS.CALENDAR className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Select Month" />
               </SelectTrigger>
               <SelectContent>
@@ -442,7 +259,7 @@ const SalaryDetails = () => {
               <CardHeader className="px-3 sm:px-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <CardTitle className="text-[#1E293B] flex items-center gap-2">
-                    <Calendar className="w-5 h-5" />
+                    <ADMINICONS.CALENDAR className="w-5 h-5" />
                     {monthData.month}
                   </CardTitle>
                   <div className="flex flex-row-reverse items-center justify-between gap-4 sm:flex-row">
@@ -462,7 +279,7 @@ const SalaryDetails = () => {
               <CardContent className="px-3 sm:px-6">
                 <div className="grid grid-cols-3 gap-4 mb-6 md:grid-cols-3">
                   <div className="items-center justify-center gap-4 p-4 bg-[#F8FAFC] rounded-lg flex sm:flex-row flex-col">
-                    <Package className="h-8 w-8 text-[#7B1E3A]" />
+                    <ADMINICONS.PACKAGE className="h-8 w-8 text-[#7B1E3A]" />
                     <div>
                       <p className="text-2xl font-bold text-[#1E293B]">
                         {monthData.totalPackets}
@@ -471,7 +288,7 @@ const SalaryDetails = () => {
                     </div>
                   </div>
                   <div className="items-center justify-center gap-4 p-4 bg-[#F8FAFC] rounded-lg flex sm:flex-row flex-col">
-                    <DollarSign className="h-8 w-8 text-[#EFB700]" />
+                    <ADMINICONS.DOLLARSIGN className="h-8 w-8 text-[#EFB700]" />
                     <div>
                       <p className="text-2xl font-bold text-[#1E293B]">
                         ₹{monthData.totalEarnings.toLocaleString()}
@@ -480,12 +297,12 @@ const SalaryDetails = () => {
                     </div>
                   </div>
                   <div className="items-center justify-center gap-4 p-4 bg-[#F8FAFC] rounded-lg flex sm:flex-row flex-col">
-                    <TrendingUp className="h-8 w-8 text-[#005B96]" />
+                    <ADMINICONS.TRENDINGUP className="h-8 w-8 text-[#005B96]" />
                     <div>
                       <p className="text-2xl font-bold text-[#1E293B]">
                         ₹
                         {Math.round(
-                          monthData.totalEarnings / monthData.totalPackets
+                          monthData.totalEarnings / monthData.totalPackets,
                         )}
                       </p>
                       <p className="text-sm text-[#475569]">Avg. per Packet</p>
@@ -499,9 +316,7 @@ const SalaryDetails = () => {
                       <TableRow>
                         <TableHead>Product Name</TableHead>
                         <TableHead className="text-center">Packets</TableHead>
-                        <TableHead className="text-center">
-                          Rate
-                        </TableHead>
+                        <TableHead className="text-center">Rate</TableHead>
                         <TableHead className="text-right">
                           Total Earnings
                         </TableHead>
@@ -527,7 +342,7 @@ const SalaryDetails = () => {
                             <span className="text-[#475569]">
                               ₹
                               {Math.round(
-                                product.totalEarnings / product.packets
+                                product.totalEarnings / product.packets,
                               )}
                             </span>
                           </TableCell>

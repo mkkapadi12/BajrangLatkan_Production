@@ -122,9 +122,31 @@ const getWorkers = async (req, res) => {
   }
 };
 
+//update worker details
+const updateWorker = async (req, res) => {
+  try {
+    const workerId = req.params.id;
+    const updateData = req.body;
+
+    const updatedWorker = await WORKER.findByIdAndUpdate(workerId, updateData, {
+      new: true,
+    });
+    if (!updatedWorker) {
+      return res.status(404).json({ msg: "Worker not found" });
+    }
+    res
+      .status(200)
+      .json({ msg: "Worker updated successfully", worker: updatedWorker });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   getAllWorkers,
   workersHome,
   getWorkerById,
   getWorkers,
+  updateWorker,
 };

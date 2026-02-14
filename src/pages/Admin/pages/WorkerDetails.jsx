@@ -19,6 +19,7 @@ import { useLoader } from "@/hooks/useLoader";
 import { Separator } from "@/components/ui/separator";
 import EditSaveCancel from "@/hooks/useEditSaveCancel";
 import { ADMINICONS } from "@/Icons/AdminIcons";
+import toast from "react-hot-toast";
 
 export function WorkerDetails() {
   const { id } = useParams();
@@ -45,10 +46,11 @@ export function WorkerDetails() {
     fetchWorker();
   }, [id]);
 
-  const handleSave = () => {
-    console.log("Updated Worker:", editedWorker);
+  const handleSave = async () => {
     setIsEditing(false);
-    // 🔗 Call API here -> api.updateWorker(editedWorker._id, editedWorker)
+    const response = await api.updateWorker(editedWorker._id, editedWorker);
+    setWorker(response.worker);
+    toast.success(response.msg);
   };
 
   const handleChange = (field, value) => {
@@ -278,7 +280,7 @@ export function WorkerDetails() {
                   handleNestedChange(
                     "emergencyContact",
                     "phone",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -325,7 +327,7 @@ export function WorkerDetails() {
                 onChange={(e) =>
                   handleChange(
                     "skills",
-                    e.target.value.split(",").map((s) => s.trim())
+                    e.target.value.split(",").map((s) => s.trim()),
                   )
                 }
               />
@@ -364,7 +366,7 @@ export function WorkerDetails() {
                   handleNestedChange(
                     "bankDetails",
                     "accountHolderName",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -378,7 +380,7 @@ export function WorkerDetails() {
                   handleNestedChange(
                     "bankDetails",
                     "accountNumber",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />

@@ -12,4 +12,10 @@ router.get("/getAll", adminMiddleware, workersController.getAllWorkers);
 router.get("/getworker/:id", adminMiddleware, workersController.getWorkerById);
 
 router.get("/getworkers", adminMiddleware, workersController.getWorkers);
+
+router.put(
+  "/updateworker/:id",
+  adminMiddleware,
+  workersController.updateWorker,
+);
 module.exports = router;

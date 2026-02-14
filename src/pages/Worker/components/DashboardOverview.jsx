@@ -5,35 +5,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/context/AuthContext";
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case "Completed":
-      return "bg-green-100 text-green-800 border-green-200";
-    case "In Progress":
-      return "bg-blue-100 text-blue-800 border-blue-200";
-    case "Pending":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    default:
-      return "bg-gray-100 text-gray-800 border-gray-200";
-  }
-};
-
-const getNotificationIcon = (type) => {
-  switch (type) {
-    case "success":
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "warning":
-      return <AlertCircle className="w-4 h-4 text-yellow-600" />;
-    case "info":
-      return <Bell className="w-4 h-4 text-blue-600" />;
-    default:
-      return <Bell className="w-4 h-4 text-gray-600" />;
-  }
-};
+import { useSalaryContext } from "@/context/SalaryContext";
 
 export function DashboardOverview() {
   const { user } = useAuthContext();
+  const { salaryDetails, currentMonthData } = useSalaryContext();
+
+  const totalPackets = salaryDetails?.months?.reduce(
+    (sum, item) => sum + (item.totalPackets || 0),
+    0,
+  );
+
+  const totalEarnings = salaryDetails?.months?.reduce(
+    (sum, item) => sum + (item.totalEarnings || 0),
+    0,
+  );
 
   return (
     <div className="space-y-6">
@@ -92,37 +78,36 @@ export function DashboardOverview() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-primary">
-              {/* {mockWorkerData.stats.assignedTasks} */} 7
+              {/* {mockWorkerData.stats.assignedTasks} */} Not Available
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Active projects
-            </p>
           </CardContent>
         </Card>
 
         <Card className="border-border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Completed Work
+              Total Packets
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {/* {mockWorkerData.stats.completedWork} */} 12
+              {totalPackets}
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">This month</p>
+            {/* <p className="mt-1 text-xs text-muted-foreground">This month</p> */}
           </CardContent>
         </Card>
 
         <Card className="border-border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Earnings
+              Total Earnings
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-secondary">₹8500</div>
-            <p className="mt-1 text-xs text-muted-foreground">Current month</p>
+            <div className="text-2xl font-bold text-secondary">
+              {totalEarnings}
+            </div>
+            {/* <p className="mt-1 text-xs text-muted-foreground">Current month</p> */}
           </CardContent>
         </Card>
 
@@ -135,10 +120,10 @@ export function DashboardOverview() {
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
               {/* {mockWorkerData.stats.workRate}% */}
-              45%
+              Not Available
             </div>
             {/* <Progress value={mockWorkerData.stats.workRate} className="mt-2" /> */}
-            <Progress value={45} className="mt-2" />
+            <Progress value={0} className="mt-2" />
           </CardContent>
         </Card>
       </div>
@@ -151,28 +136,7 @@ export function DashboardOverview() {
               Recent Assigned Work
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* <div className="space-y-3">
-              {mockWorkerData.assignedWork.slice(0, 3).map((work) => (
-                <div
-                  key={work.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted"
-                >
-                  <div>
-                    <p className="font-medium text-foreground">
-                      {work.product}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Qty: {work.quantity}
-                    </p>
-                  </div>
-                  <Badge className={getStatusColor(work.status)}>
-                    {work.status}
-                  </Badge>
-                </div>
-              ))}
-            </div> */}
-          </CardContent>
+          <CardContent>Not Available</CardContent>
         </Card>
 
         <Card className="border-border">
@@ -181,26 +145,7 @@ export function DashboardOverview() {
               Recent Notifications
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* <div className="space-y-3">
-              {mockWorkerData.notifications.slice(0, 3).map((notification) => (
-                <div
-                  key={notification.id}
-                  className="flex items-start p-3 space-x-3 rounded-lg bg-muted"
-                >
-                  {getNotificationIcon(notification.type)}
-                  <div className="flex-1">
-                    <p className="text-sm text-foreground">
-                      {notification.message}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {notification.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div> */}
-          </CardContent>
+          <CardContent>Not Available</CardContent>
         </Card>
       </div>
     </div>

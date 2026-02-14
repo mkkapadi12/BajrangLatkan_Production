@@ -8,7 +8,7 @@ const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
 
 const WorkProvider = ({ children }) => {
   const [token, setToken] = useState(
-    localStorage.getItem("adminToken") || null
+    localStorage.getItem("adminToken") || null,
   );
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +36,7 @@ const WorkProvider = ({ children }) => {
   //add daily work of each worker
   const adddailyWork = async ({ workerId, date, products }) => {
     if (!token) return;
-
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BASE_URL}/work/adddailywork`,
@@ -49,11 +49,12 @@ const WorkProvider = ({ children }) => {
           headers: {
             Authorization: authorizationToken,
           },
-        }
+        },
       );
       if (response.data) {
         toast.success("Work added successfully");
         // console.log("Work added successfully:", response.data);
+        setLoading(false);
       }
     } catch (error) {
       toast.error("Failed to add work");
@@ -79,7 +80,7 @@ const WorkProvider = ({ children }) => {
     } catch (error) {
       console.error(
         "Error fetching monthly work:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
       throw error;
     }

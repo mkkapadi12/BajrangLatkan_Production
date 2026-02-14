@@ -95,7 +95,7 @@ export function AdminHeader({ setSidebarOpen }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
 
-              <Link to="/admin/profile">
+              <Link to="/admin/settings">
                 <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 rounded-md hover:!bg-bajrang-accent/10 !text-bajrang-brand">
                   <ADMINICONS.USER className="w-4 h-4" />
                   Profile

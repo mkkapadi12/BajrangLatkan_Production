@@ -171,7 +171,7 @@ export function WorkersManagement() {
                     <TableRow key={worker._id}>
                       <TableCell>
                         <p className="font-medium">{worker?.fullName}</p>
-                        <p className="flex items-center gap-1 text-xs text-gray-500">
+                        <p className="items-center hidden gap-1 text-xs text-gray-500 sm:flex">
                           <ADMINICONS.CALENDAR className="w-3 h-3" />
                           Joined{" "}
                           {new Date(worker?.dateOfJoining).toLocaleDateString()}

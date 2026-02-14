@@ -22,11 +22,11 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useWorkContext } from "@/context/WorkContext";
-import { useLoader } from "@/hooks/useLoader";
 import toast from "react-hot-toast";
 import { products } from "@/constant";
 import { ADMINICONS } from "@/Icons/AdminIcons";
 import { api } from "@/services/api";
+import Loader from "@/helper/Loader";
 
 export function SubmitWork() {
   const { adddailyWork } = useWorkContext();
@@ -85,7 +85,7 @@ export function SubmitWork() {
           return updatedItem;
         }
         return item;
-      })
+      }),
     );
   };
 
@@ -104,7 +104,7 @@ export function SubmitWork() {
       workItems.some((item) => !item.productId || item.packets <= 0)
     ) {
       toast.error(
-        "Please select a worker and add at least one work item and add valid quantities."
+        "Please select a worker and add at least one work item and add valid quantities.",
       );
       return;
     }
@@ -150,6 +150,9 @@ export function SubmitWork() {
     fetchWorkers();
   }, [name, village, gender, phone, status]);
 
+  if (loading) {
+    return <Loader text={"Loading salary history..."} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -243,7 +246,7 @@ export function SubmitWork() {
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal",
-                      !workDate && "text-muted-foreground"
+                      !workDate && "text-muted-foreground",
                     )}
                   >
                     <ADMINICONS.CALENDAR className="w-4 h-4 mr-2" />
@@ -364,7 +367,7 @@ export function SubmitWork() {
                               updateWorkItem(
                                 item.id,
                                 "rate",
-                                Number.parseFloat(e.target.value) || 0
+                                Number.parseFloat(e.target.value) || 0,
                               )
                             }
                             placeholder="0"
@@ -382,7 +385,7 @@ export function SubmitWork() {
                               updateWorkItem(
                                 item.id,
                                 "packets",
-                                Number.parseInt(e.target.value) || 0
+                                Number.parseInt(e.target.value) || 0,
                               )
                             }
                             placeholder="0"

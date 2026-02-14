@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,52 +14,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import {
-  CalendarDays,
-  Package,
-  IndianRupee,
-  Download,
-  Clock,
-  Fullscreen,
-} from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
-import { api } from "@/services/Worker/api";
 import Loader from "@/helper/Loader";
 import DownloadSalarySlip from "./DownloadSalarySlip";
+import { Button } from "@/components/ui/button";
+import { ICONS } from "@/Icons/icons";
+import { useSalaryContext } from "@/context/SalaryContext";
+import { getStatusColor, getStatusIcon } from "@/hooks/usePaymentStatus";
 
 export function SalaryEarnings() {
   const { user } = useAuthContext();
-  const [salaryDetails, setSalaryDetails] = useState();
-  const [loading, setLoading] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState("February 2026");
-
-  const currentMonthData =
-    salaryDetails?.months?.find((month) => month.month === selectedMonth) ||
-    null;
-
-  const fetchSalaryHistory = async () => {
-    setLoading(true);
-    try {
-      const data = await api.getSalaryDetails(user?._id);
-      // console.log("Salary Details:", data);
-      setSalaryDetails(data.salaryDetails); // if you want to store in state
-    } catch (error) {
-      console.error("Error fetching salary history:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user?._id) {
-      fetchSalaryHistory();
-    }
-  }, [user, selectedMonth]);
+  const {
+    loading,
+    selectedMonth,
+    fetchSalaryHistory,
+    currentMonthData,
+    setSelectedMonth,
+  } = useSalaryContext();
 
   if (loading) {
     return <Loader text={"Loading salary history..."} />;
   }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -73,16 +46,24 @@ export function SalaryEarnings() {
             Track your monthly earnings and payment history
           </p>
         </div>
-        <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-          <SelectTrigger className="w-full sm:w-[200px]">
-            <SelectValue placeholder="Select month" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="September 2025">September 2025</SelectItem>
-            <SelectItem value="October 2025">October 2025</SelectItem>
-            <SelectItem value="February 2026">February 2026</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center justify-between gap-2">
+          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+            <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectValue placeholder="Select month" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="September 2025">September 2025</SelectItem>
+              <SelectItem value="October 2025">October 2025</SelectItem>
+              <SelectItem value="January 2026">January 2026</SelectItem>
+              <SelectItem value="February 2026">February 2026</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button>
+            <span onClick={fetchSalaryHistory}>
+              <ICONS.REFRESH />
+            </span>
+          </Button>
+        </div>
       </div>
       {!currentMonthData ? (
         <div className="p-4 text-center rounded-lg bg-muted">
@@ -96,7 +77,7 @@ export function SalaryEarnings() {
             <Card className="p-1 border-border">
               <CardContent className="p-2 sm:p-6">
                 <div className="flex items-center space-x-2">
-                  <IndianRupee className="w-5 h-5 text-primary" />
+                  <ICONS.INDIANRUPEE className="w-5 h-5 text-primary" />
                   <div>
                     <p className="text-sm text-muted-foreground">
                       Total Earnings
@@ -112,7 +93,7 @@ export function SalaryEarnings() {
             <Card className="p-1 border-border">
               <CardContent className="p-2 sm:p-6">
                 <div className="flex items-center space-x-2">
-                  <Package className="w-5 h-5 text-secondary" />
+                  <ICONS.PACKAGE className="w-5 h-5 text-secondary" />
                   <div>
                     <p className="text-sm text-muted-foreground">
                       Total Packets
@@ -128,7 +109,7 @@ export function SalaryEarnings() {
             <Card className="p-1 border-border">
               <CardContent className="p-2 sm:p-6">
                 <div className="flex items-center space-x-2">
-                  <CalendarDays className="w-5 h-5 text-accent" />
+                  <ICONS.CALENDARDAYS className="w-5 h-5 text-accent" />
                   <div>
                     <p className="text-sm text-muted-foreground">Month</p>
                     <p className="text-lg font-semibold text-foreground">
@@ -142,18 +123,12 @@ export function SalaryEarnings() {
             <Card className="p-1 border-border">
               <CardContent className="p-2 sm:p-6">
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-5 h-5 text-muted-foreground" />
+                  <ICONS.CLOCK className="w-5 h-5 text-muted-foreground" />
                   <div>
                     <p className="text-sm text-muted-foreground">Status</p>
-                    <Badge
-                      variant={
-                        currentMonthData?.status === "Pending"
-                          ? "secondary"
-                          : "default"
-                      }
-                      className="mt-1"
-                    >
-                      {currentMonthData?.status}
+                    <Badge className={getStatusColor(currentMonthData.status)}>
+                      {getStatusIcon(currentMonthData.status)}
+                      <span className="ml-1">{currentMonthData.status}</span>
                     </Badge>
                   </div>
                 </div>
@@ -234,14 +209,10 @@ export function SalaryEarnings() {
                     <p className="mb-1 text-sm text-muted-foreground">
                       Payment Status
                     </p>
-                    <Badge
-                      variant={
-                        currentMonthData?.status === "Pending"
-                          ? "secondary"
-                          : "default"
-                      }
-                    >
-                      {currentMonthData?.status}
+
+                    <Badge className={getStatusColor(currentMonthData.status)}>
+                      {getStatusIcon(currentMonthData.status)}
+                      <span className="ml-1">{currentMonthData.status}</span>
                     </Badge>
                   </div>
 
@@ -263,7 +234,7 @@ export function SalaryEarnings() {
                     </p>
                   </div>
 
-                  {currentMonthData?.status !== "Paid" && (
+                  {currentMonthData?.status === "Paid" && (
                     <DownloadSalarySlip
                       salaryData={currentMonthData}
                       workerData={user}

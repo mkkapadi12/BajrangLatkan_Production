@@ -48,7 +48,7 @@ const DownloadSalarySlip = ({ salaryData, workerData }) => {
     doc.text(
       "Thank you for your hard work!",
       14,
-      doc.lastAutoTable.finalY + 20
+      doc.lastAutoTable.finalY + 20,
     );
 
     // Generate blob URL for preview
@@ -84,7 +84,7 @@ const DownloadSalarySlip = ({ salaryData, workerData }) => {
     doc.text(
       "Thank you for your hard work!",
       14,
-      doc.lastAutoTable.finalY + 20
+      doc.lastAutoTable.finalY + 20,
     );
 
     doc.save(`SalarySlip-${salaryData.month}.pdf`);

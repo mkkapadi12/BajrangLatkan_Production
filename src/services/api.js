@@ -98,10 +98,11 @@ export const api = {
   },
 
   async updateWorker(id, data) {
-    const response = await fetch(`${BASE_URL}/workers/${id}`, {
+    const response = await fetch(`${BASE_URL}/workers/updateworker/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
       },
       body: JSON.stringify(data),
     });

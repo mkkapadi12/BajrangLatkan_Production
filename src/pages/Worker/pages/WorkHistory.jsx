@@ -18,7 +18,7 @@ import { ICONS } from "@/Icons/icons";
 
 const WorkHistory = () => {
   const { user } = useAuthContext();
-  const [selectedMonth, setSelectedMonth] = useState("September 2025");
+  const [selectedMonth, setSelectedMonth] = useState("February 2026");
   const [loading, setLoading] = useState(false);
   const [workHistory, setWorkHistory] = useState(null);
 
@@ -27,18 +27,18 @@ const WorkHistory = () => {
   // Sort daily work by date (newest first)
   const sortedDailyWork =
     currentMonthData?.dailyWork.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     ) || [];
 
   const totalMonthlyEarnings = sortedDailyWork.reduce(
     (sum, day) => sum + day.totalEarnings,
-    0
+    0,
   );
   const totalPackets = sortedDailyWork.reduce(
     (sum, day) =>
       sum +
       day.products.reduce((daySum, product) => daySum + product.packets, 0),
-    0
+    0,
   );
 
   const fetchWorkHistory = async () => {
@@ -83,7 +83,8 @@ const WorkHistory = () => {
             <SelectContent>
               <SelectItem value="September 2025">September 2025</SelectItem>
               <SelectItem value="October 2025">October 2025</SelectItem>
-              <SelectItem value="August 2025">August 2025</SelectItem>
+              <SelectItem value="January 2026">January 2026</SelectItem>
+              <SelectItem value="February 2026">February 2026</SelectItem>
             </SelectContent>
           </Select>
           <Button>
