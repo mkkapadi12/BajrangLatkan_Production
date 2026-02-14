@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuthContext } from "@/context/AuthContext";
 import Loader from "@/helper/Loader";
 import DownloadSalarySlip from "./DownloadSalarySlip";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { ICONS } from "@/Icons/icons";
 import { useSalaryContext } from "@/context/SalaryContext";
 import { getStatusColor, getStatusIcon } from "@/hooks/usePaymentStatus";
