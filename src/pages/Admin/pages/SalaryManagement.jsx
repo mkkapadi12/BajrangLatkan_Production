@@ -11,23 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -36,10 +19,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ADMINICONS } from "@/Icons/AdminIcons";
-import { api } from "@/services/api";
 import { Workerfilters } from "../components/Workerfilters";
 import { salarystatusItem } from "@/constant";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { api } from "@/services/api";
+import { usePaymentDialog } from "@/hooks/usePaymentDialog";
 
 export function SalaryManagement() {
   const [selectedSalary, setSelectedSalary] = useState(null);
@@ -111,6 +96,38 @@ export function SalaryManagement() {
     }
   };
 
+  const getSalaryTotals = (data) => {
+    return data.reduce(
+      (acc, workerSalary) => {
+        workerSalary.months.forEach((month) => {
+          acc.totalEarnings += month.totalEarnings;
+
+          if (month.status === "Paid") {
+            acc.paidAmount += month.totalEarnings;
+          }
+
+          if (month.status === "Pending") {
+            acc.pendingAmount += month.totalEarnings;
+          }
+        });
+
+        acc.totalWorker += 1; // ✅ count worker once
+
+        return acc;
+      },
+      {
+        totalEarnings: 0,
+        paidAmount: 0,
+        pendingAmount: 0,
+        totalWorker: 0,
+      },
+    );
+  };
+
+  const totals = getSalaryTotals(salaries);
+
+  // console.log(totals);
+
   const handleViewDetails = (id) => {
     // console.log("Id : ", id);
     navigate(`/admin/salary/${id}`);
@@ -120,7 +137,31 @@ export function SalaryManagement() {
     fetchWorkerSalaries();
   }, []);
 
-  // console.log("Worker Salaries :", salaries);
+  // 🔥 API call here
+  const handlePaySalary = async ({ salary, paymentMethod, paymentNotes }) => {
+    try {
+      const payload = {
+        workerId: salary.worker._id,
+        month: salary.monthData.month,
+        paymentMethod,
+        paymentNotes,
+      };
+
+      await api.payMonthlySalary(payload);
+
+      toast.success("Salary paid successfully");
+
+      // 🔄 Refresh salary details after payment
+      fetchWorkerSalaries();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Payment failed");
+      throw error; // IMPORTANT
+    }
+  };
+
+  const { openDialog, PaymentDialog } = usePaymentDialog({
+    onPay: handlePaySalary,
+  });
 
   return (
     <div className="space-y-6">
@@ -151,40 +192,46 @@ export function SalaryManagement() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-        <Card className="border-[#E2E8F0]">
+        <Card className="border-[#E2E8F0] py-2 sm:py-4">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#475569] text-sm font-medium">
                   Total Workers
                 </p>
-                <p className="text-2xl font-bold text-[#1E293B]">{"2"}</p>
+                <p className="text-2xl font-bold text-[#1E293B]">
+                  {totals?.totalWorker}
+                </p>
               </div>
               <ADMINICONS.USER className="h-8 w-8 text-[#7B1E3A]" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-[#E2E8F0]">
+        <Card className="border-[#E2E8F0] py-2 sm:py-4">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#475569] text-sm font-medium">
                   Pending Payments
                 </p>
-                <p className="text-2xl font-bold text-[#DC2626]">₹{"12,000"}</p>
+                <p className="text-2xl font-bold text-[#DC2626]">
+                  ₹{totals?.pendingAmount}
+                </p>
               </div>
               <div className="w-8 h-8 bg-[#DC2626]/10 rounded-lg flex items-center justify-center">
-                <ADMINICONS.DOLLARSIGN className="h-5 w-5 text-[#DC2626]" />
+                <ADMINICONS.INDIANRUPEE className="h-5 w-5 text-[#DC2626]" />
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-[#E2E8F0]">
+        <Card className="border-[#E2E8F0] py-2 sm:py-4">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#475569] text-sm font-medium">Processing</p>
-                <p className="text-2xl font-bold text-[#EFB700]">₹{"5,000"}</p>
+                <p className="text-2xl font-bold text-[#EFB700]">
+                  ₹{totals?.processing || "N/A"}
+                </p>
               </div>
               <div className="w-8 h-8 bg-[#EFB700]/10 rounded-lg flex items-center justify-center">
                 <ADMINICONS.CREDITCARD className="h-5 w-5 text-[#EFB700]" />
@@ -192,14 +239,16 @@ export function SalaryManagement() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-[#E2E8F0]">
+        <Card className="border-[#E2E8F0] py-2 sm:py-4">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#475569] text-sm font-medium">
-                  Paid This Month
+                  Paid Payments
                 </p>
-                <p className="text-2xl font-bold text-[#16A34A]">₹{"20,000"}</p>
+                <p className="text-2xl font-bold text-[#16A34A]">
+                  ₹{totals?.paidAmount}
+                </p>
               </div>
               <div className="w-8 h-8 bg-[#16A34A]/10 rounded-lg flex items-center justify-center">
                 <ADMINICONS.CHECKCIRCLE className="h-5 w-5 text-[#16A34A]" />
@@ -238,7 +287,7 @@ export function SalaryManagement() {
               <TableHeader>
                 <TableRow className=" bg-gray-50">
                   <TableHead className="py-3 text-gray-700">Worker</TableHead>
-                  <TableHead className="py-3 text-gray-700">Village</TableHead>
+                  <TableHead className="py-3 text-gray-700">Phone</TableHead>
                   <TableHead className="py-3 text-gray-700">Month</TableHead>
                   <TableHead className="py-3 text-center text-gray-700">
                     Total Packets
@@ -264,7 +313,7 @@ export function SalaryManagement() {
                     });
 
                     const monthData = salary.months.find(
-                      (m) => m.month === currentMonth
+                      (m) => m.month === currentMonth,
                     );
                     if (!monthData) return null;
 
@@ -279,7 +328,7 @@ export function SalaryManagement() {
                             <p className="font-semibold text-gray-800">
                               {salary.worker.fullName}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="sm:block hidden text-xs text-gray-500">
                               ID: {salary.worker.workerId}
                             </p>
                           </div>
@@ -287,7 +336,7 @@ export function SalaryManagement() {
 
                         {/* Village */}
                         <TableCell className="py-4 text-gray-700">
-                          {salary.worker.address?.village || "N/A"}
+                          {salary.worker.phone || "N/A"}
                         </TableCell>
 
                         {/* Month */}
@@ -337,7 +386,9 @@ export function SalaryManagement() {
                             >
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuItem
-                                onClick={() => handleViewDetails(salary.worker._id)}
+                                onClick={() =>
+                                  handleViewDetails(salary.worker._id)
+                                }
                               >
                                 <ADMINICONS.EYE className="w-4 h-4 mr-2" />
                                 View Details
@@ -346,22 +397,20 @@ export function SalaryManagement() {
                                 <ADMINICONS.DOWNLOAD className="w-4 h-4 mr-2" />
                                 Download Slip
                               </DropdownMenuItem>
+                              <DropdownMenuSeparator />
                               {monthData.status === "Pending" && (
-                                <>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      setSelectedSalary({
-                                        worker: salary.worker,
-                                        monthData,
-                                      });
-                                      setIsPaymentDialogOpen(true);
-                                    }}
-                                  >
-                                    <ADMINICONS.CHECKCIRCLE className="w-4 h-4 mr-2" />
-                                    Process Payment
-                                  </DropdownMenuItem>
-                                </>
+                                <DropdownMenuItem
+                                  onSelect={(e) => {
+                                    e.preventDefault(); // ⬅️ VERY IMPORTANT
+                                    openDialog({
+                                      worker: salary.worker,
+                                      monthData,
+                                    });
+                                  }}
+                                >
+                                  <ADMINICONS.CHECKCIRCLE className="w-4 h-4 mr-2" />
+                                  Process Payment
+                                </DropdownMenuItem>
                               )}
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -395,65 +444,7 @@ export function SalaryManagement() {
       </Card>
 
       {/* Payment Processing Dialog */}
-      <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Process Payment</DialogTitle>
-            <DialogDescription>
-              Process salary payment for the selected worker.
-            </DialogDescription>
-          </DialogHeader>
-          {selectedSalary && (
-            <div className="space-y-4">
-              <div className="p-4 bg-[#F8FAFC] rounded-lg">
-                <h4 className="font-medium text-[#1E293B]">
-                  {selectedSalary.workerName}
-                </h4>
-                <p className="text-sm text-[#475569]">
-                  {selectedSalary.month} {selectedSalary.year} - ₹
-                  {/* {selectedSalary.netSalary.toLocaleString()} */}
-                </p>
-              </div>
-              <div>
-                <Label htmlFor="paymentMethod">Payment Method</Label>
-                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select payment method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bank-transfer">Bank Transfer</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="upi">UPI</SelectItem>
-                    <SelectItem value="cheque">Cheque</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="paymentNotes">Payment Notes</Label>
-                <Textarea
-                  id="paymentNotes"
-                  value={paymentNotes}
-                  onChange={(e) => setPaymentNotes(e.target.value)}
-                  placeholder="Add any notes about this payment..."
-                  rows={3}
-                />
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button
-              onClick={() =>
-                selectedSalary && handleProcessPayment(selectedSalary.id)
-              }
-              className="bg-[#16A34A] hover:bg-[#16A34A]/90 text-white"
-              disabled={!paymentMethod}
-            >
-              <ADMINICONS.CHECKCIRCLE className="w-4 h-4 mr-2" />
-              Process Payment
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <PaymentDialog />
     </div>
   );
 }

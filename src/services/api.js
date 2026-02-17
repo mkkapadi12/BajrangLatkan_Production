@@ -1,44 +1,12 @@
+import axios from "axios";
+
 // const BASE_URL = "http://localhost:5000/api";
 const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
 
 export const api = {
-  // Products
-  async getProducts(filters) {
-    const params = new URLSearchParams(filters).toString();
-    const response = await fetch(`${BASE_URL}/products?${params}`);
-    if (!response.ok) throw new Error("Failed to fetch products");
-    return response.json();
-  },
+  // get Worker services
 
-  async createProduct(data) {
-    const response = await fetch(`${BASE_URL}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  },
-
-  async updateProduct(id, data) {
-    const response = await fetch(`${BASE_URL}/products/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  },
-
-  async deleteProduct(id) {
-    const response = await fetch(`${BASE_URL}/products/${id}`, {
-      method: "DELETE",
-    });
-    return response.json();
-  },
-
+  // 1.get all wokers list
   async getAllWorkers({
     name,
     village,
@@ -68,6 +36,7 @@ export const api = {
     return workersData;
   },
 
+  // 2. get all workers details by id
   async getworkerdetails(id) {
     const response = await fetch(`${BASE_URL}/workers/getworker/${id}`, {
       headers: {
@@ -80,23 +49,9 @@ export const api = {
     return workerDetails;
   },
 
-  async getWorker(id) {
-    const response = await fetch(`${BASE_URL}/getworker/${id}`);
-    if (!response.ok) throw new Error("Failed to fetch worker");
-    return response.json();
-  },
+  // Worker CRUD operations
 
-  async createWorker(data) {
-    const response = await fetch(`${BASE_URL}/workers`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  },
-
+  // update
   async updateWorker(id, data) {
     const response = await fetch(`${BASE_URL}/workers/updateworker/${id}`, {
       method: "PUT",
@@ -109,6 +64,7 @@ export const api = {
     return response.json();
   },
 
+  // delete
   async deleteWorker(id) {
     const response = await fetch(`${BASE_URL}/workers/${id}`, {
       method: "DELETE",
@@ -116,6 +72,9 @@ export const api = {
     return response.json();
   },
 
+  // Worker Auth Services
+
+  // 1. worker signup
   async createUser(data) {
     try {
       const response = await fetch(`${BASE_URL}/auth/signup`, {
@@ -132,6 +91,7 @@ export const api = {
     }
   },
 
+  // 2. worker login
   async login(data) {
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
@@ -150,6 +110,7 @@ export const api = {
 
   //Admin Auth Services
 
+  // 1. admin sign up
   async adminSignup(data) {
     try {
       const response = await fetch(`${BASE_URL}/admin/signup`, {
@@ -166,6 +127,7 @@ export const api = {
     }
   },
 
+  // 2. admin login
   async adminLogin(data) {
     try {
       const response = await fetch(`${BASE_URL}/admin/login`, {
@@ -210,5 +172,24 @@ export const api = {
       throw new Error("Failed to fetch salary details for worker");
     const salaryDetails = await response.json();
     return salaryDetails;
+  },
+
+  //Payment Monthly salary
+  async payMonthlySalary(payload) {
+    try {
+      const { data } = await axios.put(
+        `${BASE_URL}/salary/pay-monthly-salary`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      console.error("Error paying monthly salary:", error);
+      throw error;
+    }
   },
 };

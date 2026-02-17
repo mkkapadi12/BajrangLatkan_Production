@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -22,6 +28,8 @@ import { api } from "@/services/api";
 import Loader from "@/helper/Loader";
 import { getStatusColor, getStatusIcon } from "@/hooks/usePaymentStatus";
 import { ADMINICONS } from "@/Icons/AdminIcons";
+import { usePaymentDialog } from "@/hooks/usePaymentDialog";
+import toast from "react-hot-toast";
 
 const SalaryDetails = () => {
   const { id } = useParams();
@@ -71,6 +79,33 @@ const SalaryDetails = () => {
     };
     fetchWorker();
   }, [id]);
+
+  // 🔥 API call here
+  const handlePaySalary = async ({ salary, paymentMethod, paymentNotes }) => {
+    try {
+      const payload = {
+        workerId: salary.worker._id,
+        month: salary.monthData.month,
+        paymentMethod,
+        paymentNotes,
+      };
+
+      await api.payMonthlySalary(payload);
+
+      toast.success("Salary paid successfully");
+
+      // 🔄 Refresh salary details after payment
+      const updated = await api.getSalaryDetailsByWorker(id);
+      setSalarydetails(updated);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Payment failed");
+      throw error; // IMPORTANT
+    }
+  };
+
+  const { openDialog, PaymentDialog } = usePaymentDialog({
+    onPay: handlePaySalary,
+  });
 
   if (loading) {
     return <Loader text="Loading Salary details..." />;
@@ -249,6 +284,9 @@ const SalaryDetails = () => {
         </CardContent>
       </Card>
 
+      {/* ✅ Dialog mounted once */}
+      <PaymentDialog />
+
       {/* Monthly Details */}
       <div className="space-y-6">
         {filteredMonths
@@ -357,6 +395,20 @@ const SalaryDetails = () => {
                   </Table>
                 </div>
               </CardContent>
+              <CardFooter>
+                {monthData.status === "Pending" && (
+                  <Button
+                    onClick={() =>
+                      openDialog({
+                        worker,
+                        monthData,
+                      })
+                    }
+                  >
+                    Pay Salary
+                  </Button>
+                )}
+              </CardFooter>
             </Card>
           ))}
       </div>

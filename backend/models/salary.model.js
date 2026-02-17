@@ -16,6 +16,11 @@ const monthEntrySchema = new mongoose.Schema({
     enum: ["Pending", "Paid"],
     default: "Pending",
   },
+
+  // 🔥 payment info
+  paymentMethod: String,
+  paymentNotes: String,
+  paidAt: Date,
 });
 
 const salarySchema = new mongoose.Schema(
@@ -27,7 +32,7 @@ const salarySchema = new mongoose.Schema(
     },
     months: [monthEntrySchema], // full salary history
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const SALARY = mongoose.model("Salary", salarySchema);

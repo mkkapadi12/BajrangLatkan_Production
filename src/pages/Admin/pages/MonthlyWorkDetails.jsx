@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/badge";
@@ -9,18 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ArrowLeft,
-  Calendar,
-  Package,
-  IndianRupee,
-  TrendingUp,
-  User,
-  MapPin,
-} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWorkContext } from "@/context/WorkContext";
 import Loader from "@/helper/Loader";
+import { ADMINICONS } from "@/Icons/AdminIcons";
 
 const availableMonths = [
   "September 2025",
@@ -124,7 +116,7 @@ function MonthlyWorkDetails() {
             onClick={() => router(-1)}
             className="border-[#E2E8F0] hover:bg-[#F8FAFC]"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ADMINICONS.ARROWLEFT className="w-4 h-4 mr-2" />
             Back
           </Button>
           <div>
@@ -141,7 +133,7 @@ function MonthlyWorkDetails() {
         {/* Month Selector */}
         <Select value={selectedMonth} onValueChange={setSelectedMonth}>
           <SelectTrigger className="w-[200px]">
-            <Calendar className="w-4 h-4 mr-2" />
+            <ADMINICONS.CALENDAR className="w-4 h-4 mr-2" />
             <SelectValue placeholder="Select Month" />
           </SelectTrigger>
           <SelectContent>
@@ -161,14 +153,14 @@ function MonthlyWorkDetails() {
             <CardContent className="p-3 md:p-6 sm:p-4">
               <div className="flex flex-col justify-center gap-4 sm:items-center sm:flex-row">
                 <div className="h-16 w-16 bg-[#7B1E3A] rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-white" />
+                  <ADMINICONS.USER className="w-8 h-8 text-white" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-semibold text-[#1E293B]">
                     {currentWorkData?.worker?.fullName}
                   </h3>
                   <p className="text-[#475569] flex items-center gap-1 mt-1">
-                    <MapPin className="w-4 h-4" />
+                    <ADMINICONS.MAPPIN className="w-4 h-4" />
                     Worker ID: {currentWorkData?.worker?.workerId}
                   </p>
                 </div>
@@ -187,7 +179,7 @@ function MonthlyWorkDetails() {
             <Card className="border-[#E2E8F0]">
               <CardContent className="p-4">
                 <div className="text-center">
-                  <Calendar className="h-8 w-8 text-[#7B1E3A] mx-auto mb-2" />
+                  <ADMINICONS.CALENDAR className="h-8 w-8 text-[#7B1E3A] mx-auto mb-2" />
                   <p className="text-2xl font-bold text-[#1E293B]">
                     {monthlyStats?.totalDays}
                   </p>
@@ -199,7 +191,7 @@ function MonthlyWorkDetails() {
             <Card className="border-[#E2E8F0]">
               <CardContent className="p-4">
                 <div className="text-center">
-                  <Package className="h-8 w-8 text-[#005B96] mx-auto mb-2" />
+                  <ADMINICONS.PACKAGE className="h-8 w-8 text-[#005B96] mx-auto mb-2" />
                   <p className="text-2xl font-bold text-[#1E293B]">
                     {monthlyStats?.totalPackets}
                   </p>
@@ -211,7 +203,7 @@ function MonthlyWorkDetails() {
             <Card className="border-[#E2E8F0]">
               <CardContent className="p-4">
                 <div className="text-center">
-                  <IndianRupee className="h-8 w-8 text-[#EFB700] mx-auto mb-2" />
+                  <ADMINICONS.INDIANRUPEE className="h-8 w-8 text-[#EFB700] mx-auto mb-2" />
                   <p className="text-2xl font-bold text-[#1E293B]">
                     ₹{monthlyStats?.totalEarnings}
                   </p>
@@ -223,7 +215,7 @@ function MonthlyWorkDetails() {
             <Card className="border-[#E2E8F0]">
               <CardContent className="p-4">
                 <div className="text-center">
-                  <TrendingUp className="h-8 w-8 text-[#16A34A] mx-auto mb-2" />
+                  <ADMINICONS.TRENDINGUP className="h-8 w-8 text-[#16A34A] mx-auto mb-2" />
                   <p className="text-2xl font-bold text-[#1E293B]">
                     ₹{Math.round(monthlyStats?.avgDailyEarnings || 0)}
                   </p>
@@ -238,7 +230,7 @@ function MonthlyWorkDetails() {
             <Card className="border-[#E2E8F0]">
               <CardHeader>
                 <CardTitle className="text-[#1E293B] flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5" />
+                  <ADMINICONS.TRENDINGUP className="w-5 h-5" />
                   Top Performing Product
                 </CardTitle>
               </CardHeader>
@@ -273,7 +265,7 @@ function MonthlyWorkDetails() {
           <Card className="border-[#E2E8F0]">
             <CardHeader>
               <CardTitle className="text-[#1E293B] flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+                <ADMINICONS.CALENDAR className="w-5 h-5" />
                 Daily Work Details - {selectedMonth}
               </CardTitle>
             </CardHeader>
@@ -289,7 +281,7 @@ function MonthlyWorkDetails() {
                     >
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-semibold text-[#1E293B] flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
+                          <ADMINICONS.CALENDAR className="w-4 h-4" />
                           {new Date(dayWork.date).toLocaleDateString("en-IN", {
                             weekday: "long",
                             year: "numeric",
@@ -340,7 +332,7 @@ function MonthlyWorkDetails() {
       ) : (
         <Card className="border-[#E2E8F0]">
           <CardContent className="p-12 text-center">
-            <Calendar className="h-16 w-16 text-[#94A3B8] mx-auto mb-4" />
+            <ADMINICONS.CALENDAR className="h-16 w-16 text-[#94A3B8] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-[#1E293B] mb-2">
               No Data Available
             </h3>

@@ -11,7 +11,13 @@ router.get("/salarydetails", adminMiddleware, salaryController.salaryDetails);
 router.get(
   "/worker/:workerId",
   adminMiddleware,
-  salaryController.salaryDetailsByWorker
+  salaryController.salaryDetailsByWorker,
+);
+
+router.put(
+  "/pay-monthly-salary",
+  adminMiddleware,
+  salaryController.payMonthlySalary,
 );
 
 module.exports = router;
