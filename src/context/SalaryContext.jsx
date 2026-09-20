@@ -3,8 +3,8 @@ import { useAuthContext } from "./AuthContext";
 import { api } from "@/services/Worker/api";
 
 const SalaryContext = createContext();
-const BASE_URL = "http://localhost:5000/api"; // Update with your actual base URL if needed
-// const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
+// const BASE_URL = "http://localhost:5000/api"; // Update with your actual base URL if needed
+const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
 
 const SalaryProvider = ({ children }) => {
   const { user } = useAuthContext();
