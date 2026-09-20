@@ -38,7 +38,6 @@ const adminSchema = new mongoose.Schema(
 
     phone: {
       type: String,
-      unique: true, // each admin must have unique phone
     },
 
     role: {

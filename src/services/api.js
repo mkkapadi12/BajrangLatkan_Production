@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:5000/api";
-const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
+const BASE_URL = "http://localhost:5000/api";
+// const BASE_URL = "https://bajrang-latkan-production-server.vercel.app/api";
 
 export const api = {
   // get Worker services
@@ -112,6 +112,8 @@ export const api = {
 
   // 1. admin sign up
   async adminSignup(data) {
+    console.log("Data :", data);
+
     try {
       const response = await fetch(`${BASE_URL}/admin/signup`, {
         method: "POST",

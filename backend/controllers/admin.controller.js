@@ -9,8 +9,7 @@ const getAdminHome = (req, res) => {
 // Admin Registration Controller
 const registerAdmin = async (req, res) => {
   try {
-    const { adminname, email, password, confirmPassword, phone, photo } =
-      req.body;
+    const { adminname, email, password, confirmPassword } = req.body;
 
     // 1. Check if email already exists
     const existingAdmin = await ADMIN.findOne({ email });
@@ -24,8 +23,8 @@ const registerAdmin = async (req, res) => {
       email,
       password,
       confirmPassword,
-      phone,
-      photo,
+      // phone,
+      // photo,
     });
 
     await newAdmin.save();

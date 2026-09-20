@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
@@ -101,6 +99,7 @@ export function NotificationsManagement() {
       totalRecipients: recipients === "all" ? 24 : selectedWorkers.length,
     };
     setNotifications([newNotification, ...notifications]);
+
     setIsCreateDialogOpen(false);
     setSelectedWorkers([]);
     setNotificationType("");
@@ -225,8 +224,8 @@ export function NotificationsManagement() {
                               } else {
                                 setSelectedWorkers(
                                   selectedWorkers.filter(
-                                    (name) => name !== worker.name
-                                  )
+                                    (name) => name !== worker.name,
+                                  ),
                                 );
                               }
                             }}
@@ -291,9 +290,9 @@ export function NotificationsManagement() {
                     (notifications.reduce((acc, n) => acc + n.readCount, 0) /
                       notifications.reduce(
                         (acc, n) => acc + n.totalRecipients,
-                        0
+                        0,
                       )) *
-                      100
+                      100,
                   )}
                   %
                 </p>
@@ -327,7 +326,7 @@ export function NotificationsManagement() {
                     notifications.filter(
                       (n) =>
                         new Date(n.sentDate).getMonth() ===
-                        new Date().getMonth()
+                        new Date().getMonth(),
                     ).length
                   }
                 </p>
@@ -405,7 +404,7 @@ export function NotificationsManagement() {
                   <span className="text-xs text-[#475569] whitespace-nowrap">
                     {Math.round(
                       (notification.readCount / notification.totalRecipients) *
-                        100
+                        100,
                     )}
                     % read
                   </span>

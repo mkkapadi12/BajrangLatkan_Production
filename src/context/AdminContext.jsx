@@ -4,9 +4,9 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 // import toast from "react-hot-toast";
 
 const AdminContext = createContext();
-// const BASE_URL = "http://localhost:5000/api/admin"; // Update with your actual base URL if needed
-const BASE_URL =
-"https://bajrang-latkan-production-server.vercel.app/api/admin";
+const BASE_URL = "http://localhost:5000/api/admin"; // Update with your actual base URL if needed
+// const BASE_URL =
+// "https://bajrang-latkan-production-server.vercel.app/api/admin";
 
 const AdminProvider = ({ children }) => {
   const [token, setToken] = useState(
